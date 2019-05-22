@@ -152,8 +152,8 @@ public class Game extends Pane {
                 playersPiles.add(playerPile);
                 getChildren().add(playerPile);
                 // PLAYER WON CARDS PILE
-                Pile playerWonCards = new Pile(Pile.PileType.WONCARDS, names[i] + "WonCards", WONCARDS_GAP);
-                playerWonCards.setOwnerID(i);
+                Pile playerWonCards = new Pile(Pile.PileType.WONCARDS, names[i], WONCARDS_GAP);
+                //playerWonCards.setOwnerID(i);
                 playerWonCards.setBlurredBackground();
                 playerWonCards.setLayoutX(wonCardsPilesX[i]);
                 playerWonCards.setLayoutY(20);
