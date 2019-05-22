@@ -5,8 +5,8 @@ import org.w3c.dom.NodeList;
 import java.util.List;
 
 public interface CardsDao {
-    public List getCards();
-    public Card getCard(int index);
-    public void addCards();
-    public NodeList getCardParameters();
+    List getCards();
+    Card getCard(int index);
+    void addCards();
+    NodeList getCardParameters();
 }
