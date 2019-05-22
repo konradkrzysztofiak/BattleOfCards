@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Cards>
+    <Card id = "1">
+        <CardName>Hero_1</CardName>
+        <Army>100</Army>
+        <Lands>100</Lands>
+        <Money>1000</Money>
+        <Influence>10</Influence>
+    </Card>
+    <Card id = "2">
+        <CardName>Hero_2</CardName>
+        <Army>200</Army>
+        <Lands>200</Lands>
+        <Money>2000</Money>
+        <Influence>20</Influence>
+    </Card>
+    <Card id = "3">
+        <CardName>Hero_3</CardName>
+        <Army>300</Army>
+        <Lands>300</Lands>
+        <Money>3000</Money>
+        <Influence>30</Influence>
+    </Card>
+    <Card id = "4">
+        <CardName>Hero_4</CardName>
+        <Army>400</Army>
+        <Lands>400</Lands>
+        <Money>4000</Money>
+        <Influence>40</Influence>
+    </Card>
+</Cards>
