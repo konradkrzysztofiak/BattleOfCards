@@ -5,7 +5,8 @@ public class TestMain {
         CardsDaoXml cardsDao = new CardsDaoXml();
         cardsDao.addCards();
 
-        //System.out.println(cardsDao.getCards().get(0));
-        System.out.println(cardsDao.getCard(0));
+        for(Object card : cardsDao.getCards()){
+            System.out.println(card);
+        }
     }
 }
