@@ -2,7 +2,7 @@ package com.codecool.klondike.Data;
 
 public class TestMain {
     public static void main(String[] args){
-        CardsDaoImpl cardsDao = new CardsDaoImpl();
+        CardsDaoXml cardsDao = new CardsDaoXml();
         cardsDao.addCards();
 
         //System.out.println(cardsDao.getCards().get(0));

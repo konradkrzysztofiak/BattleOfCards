@@ -8,10 +8,10 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardsDaoImpl implements CardsDao  {
+public class CardsDaoXml implements CardsDao  {
     private ArrayList<Card> cards;
 
-    public CardsDaoImpl() {
+    public CardsDaoXml() {
         cards = new ArrayList<>();
     }
 
@@ -29,7 +29,7 @@ public class CardsDaoImpl implements CardsDao  {
 
     @Override
     public void addCards() {
-        NodeList nodeList = getCardParametersFromXML();
+        NodeList nodeList = getCardParameters();
         for(int i= 0 ; i<nodeList.getLength();i++){
             Node node = nodeList.item(i);
 
@@ -47,7 +47,8 @@ public class CardsDaoImpl implements CardsDao  {
         }
     }
 
-    private NodeList getCardParametersFromXML(){
+    @Override
+    public NodeList getCardParameters(){
         XMLParserer xmlParserer = new XMLParserer();
         xmlParserer.loadXmlDoc("/home/michal/IdeaProjects/BattleOfCards/src/com/codecool/klondike/Data/XmlCards.xml");
         Document document = xmlParserer.getDocument();
