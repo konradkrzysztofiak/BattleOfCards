@@ -45,10 +45,6 @@ public class Game extends Pane {
     };
 
     private EventHandler<MouseEvent> onMouseMovedHandler = e -> {
-     /*   if (isGameWon())
-            System.out.println("Win");
-        else
-            System.out.println("Notwin");*/
 
     };
 
@@ -61,28 +57,6 @@ public class Game extends Pane {
         dragStartX = e.getSceneX();
         dragStartY = e.getSceneY();
     };
-
-//    private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
-//        Card card = (Card) e.getSource();
-//        Pile activePile = card.getContainingPile();
-//        if (activePile.getPileType() == Pile.PileType.STOCK)
-//            return;
-//        if(activePile.getTopCard() != card)
-//            return;
-//        double offsetX = e.getSceneX() - dragStartX;
-//        double offsetY = e.getSceneY() - dragStartY;
-//
-//        draggedCards.clear();
-//        draggedCards.add(card);
-//
-//        card.getDropShadow().setRadius(20);
-//        card.getDropShadow().setOffsetX(10);
-//        card.getDropShadow().setOffsetY(10);
-//
-//        card.toFront();
-//        card.setTranslateX(offsetX);
-//        card.setTranslateY(offsetY);
-//    };
 
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
@@ -151,10 +125,6 @@ public class Game extends Pane {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
         }
-
-        /*if (isGameWon())
-            System.out.println("Win");*/
-
     };
 
     private void updateTableauTopCard(Card card) {
@@ -317,7 +287,6 @@ public class Game extends Pane {
             foundationPile.setLayoutY(20);
             foundationPiles.add(foundationPile);
             getChildren().add(foundationPile);
-
         }
         for (int i = 0; i < 7; i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
@@ -326,7 +295,6 @@ public class Game extends Pane {
             tableauPile.setLayoutY(275);
             tableauPiles.add(tableauPile);
             getChildren().add(tableauPile);
-
         }
     }
 
@@ -335,10 +303,6 @@ public class Game extends Pane {
         Iterator<Card> deckIterator = deck.iterator();
         dealCardsToTableau(deckIterator);
         dealCardsToStock(deckIterator);
-
-        //TODO
-
-
     }
 
     private void dealCardsToTableau(Iterator<Card> deckIterator) {
@@ -362,7 +326,6 @@ public class Game extends Pane {
             getChildren().add(card);
         });
     }
-
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
