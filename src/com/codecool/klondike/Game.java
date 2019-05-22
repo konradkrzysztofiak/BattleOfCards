@@ -18,29 +18,34 @@ import java.util.List;
 public class Game extends Pane {
 
     private List<Card> deck = new ArrayList<>();
-
-    //private Pile player1Pile;
-    //private List<playersPiles> playersPiles = new ArrayList<>();
-    //private Pile player2Pile;
-    Card player1TopCard;
-    Card player2TopCard;
-    private List<Pile> playersPiles = FXCollections.observableArrayList();
-    //private Pile player1Fight;
-    //private Pile player2Fight;
+    private Card player1TopCard;
+    private Card player2TopCard;
+    private Player player1;
+    private Player player2;
     private String[] names = {"Eugeniusz", "Mieczyslaw"};
-    private Main main = new Main();
-
-
-    private double dragStartX, dragStartY;
-    private List<Card> draggedCards = FXCollections.observableArrayList();
-
+    private List<Pile> playersPiles = FXCollections.observableArrayList();
+    private List<Pile> wonCardsPiles = FXCollections.observableArrayList();
     private static double PLAYER_GAP = 1;
-    private static double FOUNDATION_GAP = 1;
-    private static double FIGHT_GAP = 1;
+    private static double WONCARDS_GAP = 1;
+
+    public Game() {
+
+        deck = Card.createNewDeck();
+        initPiles(2, this.names);
+        addEventHandler(KeyEvent.KEY_PRESSED, handler);
+        dealCards();
+        player1.setTurn(true);
+    }
+
+    public void addMouseEventHandlers(Card card) {
+
+        card.setOnMouseClicked(onMouseClickedHandler);
+        //card.setOnMouseMoved(onMouseMovedHandler);
+
+    }
 
     private EventHandler<KeyEvent> handler = event -> {
-        //Card player1TopCard = player1Pile.getTopCard();
-        //Card player2TopCard = player2Pile.getTopCard();
+
         switch (event.getCode()) {
             case Q:
                 System.out.println("up");
@@ -63,124 +68,49 @@ public class Game extends Pane {
 
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
-        int i = 0;
-
-
-
+    //todo
         Card card = (Card) e.getSource();
-        System.out.println(card.getContainingPile().getName());
 
-        for(Pile playerPile : playersPiles){
-            if(card.getContainingPile().getName().equals(names[0])){
-                Card player1TopCard = playerPile.getTopCard();
-                if(card == player1TopCard && card.isFaceDown()) {
-                    player1TopCard.flip();
-                }
-            } else if(card.getContainingPile().getName().equals(names[1])){
-                Card player2TopCard = playerPile.getTopCard();
-                if(card.isFaceDown()) {
-                    card.flip();
-                }
-            }
-        }
-
-        //Card player2TopCard = player2Pile.getTopCard();
-        //todo
-        //jedna karta odkryta/ kolejny gracz ma ruch iterator albo najlepiej klase playera
-        if (card.getContainingPile().getPileType() == Pile.PileType.PLAYERS) {
-//            if(isMoveValid(player1Pile, player2Pile)) {
-//                player1TopCard.moveToPile(player1Fight);
-//                player2TopCard.moveToPile(player1Fight);
-//            } else {
-//                player1TopCard.moveToPile(player2Fight);
-//                player2TopCard.moveToPile(player2Fight);
-//            }
-            if(card.isFaceDown()) {
-                card.flip();
+        if(player1.hasTurn() && card.getContainingPile().getOwnerID() == player1.id()){
+            player1TopCard = card.getContainingPile().getTopCard();
+            System.out.println(player1TopCard.getName());
+            System.out.println("elo");
+            //if(card == player1TopCard && card.isFaceDown()) {
+            if(card == player1TopCard) {
+                player1TopCard.flip();
+                player1.setTurn(false);
+                player2.setTurn(true);
             }
 
-
-        }else if (card.getContainingPile().getPileType() == Pile.PileType.PLAYERS) {
-//            if(isMoveValid(player1Pile, player2Pile)) {
-//                player1TopCard.moveToPile(player1Fight);
-//                player2TopCard.moveToPile(player1Fight);
-//            } else {
-//                player1TopCard.moveToPile(player2Fight);
-//                player2TopCard.moveToPile(player2Fight);
-//            }
-
+        } else if(player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id()){
+            player2TopCard = card.getContainingPile().getTopCard();
+            //if(card == player2TopCard && card.isFaceDown()) {
+            if(card == player2TopCard) {
+                player2TopCard.flip();
+                player2.setTurn(false);
+                player1.setTurn(false);
+            }
         }
-
-    };
-
-
-
-    private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
-//        if (player1Pile.isEmpty()) {
-//            Pile activePile = player1Pile;
-//            Pile previousPile = player1Fight;
-//            refillStockFromDiscard(activePile, previousPile);
-//        } else if (player2Pile.getPileType() == Pile.PileType.PLAYERS) {
-//            Pile activePile = player2Pile;
-//            Pile previousPile = player2Fight;
-//            System.out.println("elo");
-//            refillStockFromDiscard(activePile, previousPile);
-//        }
-
     };
 
     private void checkWinnerOfRound(Card player1Card, Card player2Card){
+        //todo
         //if(player1Card.getRank() > player2Card.getRank()){
-//            player1Card.moveToPile(player1Fight);
-//            player2Card.moveToPile(player1Fight);
-//            player1Card.flip();
-//            player2Card.flip();
-        //} else {
-//            player1Card.moveToPile(player2Fight);
-//            player2Card.moveToPile(player2Fight);
+
+            player1Card.moveToPile(wonCardsPiles.get(1));
+            player2Card.moveToPile(wonCardsPiles.get(1));
+            player1Card.flip();
+            player2Card.flip();
+            player1.setTurn(true);
+       // } else {
+//            player1Card.moveToPile(playersPiles.get(2));
+//            player2Card.moveToPile(playersPiles.get(2));
 //            player1Card.flip();
 //            player2Card.flip();
 
        // }
 
     }
-    private boolean isMoveValid(Pile player1Pile, Pile player2Pile) {
-        Card player1TopCard = player1Pile.getTopCard();
-        Card player2TopCard = player2Pile.getTopCard();
-
-        if (!player2TopCard.isFaceDown() && player1TopCard.getRank() > player2TopCard.getRank()
-                && !player2TopCard.isFaceDown()  ) {
-
-            return true;
-        } else if (player2TopCard.getRank() > player1TopCard.getRank() && !player1TopCard.isFaceDown()
-                && !player2TopCard.isFaceDown()   ) {
-
-
-            return false;
-
-        }
-        return false;
-        //return true;
-    }
-
-
-
-
-    public Game() {
-        deck = Card.createNewDeck();
-        initPiles(2, this.names);
-        addEventHandler(KeyEvent.KEY_PRESSED, handler);
-        dealCards();
-    }
-
-    public void addMouseEventHandlers(Card card) {
-        card.setOnMouseClicked(onMouseClickedHandler);
-
-        //card.setOnMouseMoved(onMouseMovedHandler);
-
-
-    }
-
 
 
     public void refillStockFromDiscard(Pile activePile, Pile previousPile) {
@@ -199,42 +129,37 @@ public class Game extends Pane {
 
     }
 
-//    private boolean isMoveValid(Card card, Pile destPile) {
-
-//        Card topCard = destPile.getTopCard();
-//
-//        if (fightPiles.contains(destPile)) {
-//            return isMoveValidInTableau(card, topCard, destPile);
-//        } else if (foundationPiles.contains(destPile)) {
-//            return isMoveValidInFoundation(card, topCard, destPile);
-//        }
-//        return false;
-//        //return true;
-//    }
-
-
-
     private void initPiles(int howManyPlayers, String[] names) {
-        //todo
+        createPlayers(howManyPlayers,names);
         initPlayerPiles(howManyPlayers, names);
-
         }
 
     private void initPlayerPiles(int howManyPlayers, String[] names){
         //todo
 
+
         for (int i = 0; i < howManyPlayers; i++) {
-            String player = "PLAYER" + i;
             int[] coordinates = {95, 1150};
+            int[] wonCardsPilesX = {320, 930};
             if (howManyPlayers == 2) {
+                // PLAYER PILE
                 Pile playerPile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
-                //player1Pile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
+                playerPile.setOwnerID(i);
                 playerPile.setBlurredBackground();
                 playerPile.setLayoutX(coordinates[i]);
                 playerPile.setLayoutY(20);
-                playerPile.setOnMouseClicked(stockReverseCardsHandler);
+                //playerPile.setOnMouseClicked(stockReverseCardsHandler);
                 playersPiles.add(playerPile);
                 getChildren().add(playerPile);
+                // PLAYER WON CARDS PILE
+                Pile playerWonCards = new Pile(Pile.PileType.WONCARDS, names[i] + "WonCards", WONCARDS_GAP);
+                playerWonCards.setOwnerID(i);
+                playerWonCards.setBlurredBackground();
+                playerWonCards.setLayoutX(wonCardsPilesX[i]);
+                playerWonCards.setLayoutY(20);
+                wonCardsPiles.add(playerWonCards);
+                getChildren().add(playerWonCards);
+                /////////////////////////////////////////////////
 
 //                player2Pile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
 //                player2Pile.setBlurredBackground();
@@ -268,6 +193,11 @@ public class Game extends Pane {
 
 
     }
+    private void createPlayers(int howManyPlayers, String[] names){
+        player1 = new Player(0,0);
+        player2 = new Player(1,0);
+
+    }
     //}
 
     public void dealCards() {
@@ -285,7 +215,7 @@ public class Game extends Pane {
         int amountOfCards = 28;
         int howManyPlayers = 2;
         for (Pile playerPile : playersPiles) {
-            for (int i = 0; i < amountOfCards / howManyPlayers; i++) {
+            for (int i = 0; i < amountOfCards / 2; i++) {
                 Card card = deckIterator.next();
                 addMouseEventHandlers(card);
                 playerPile.addCard(card);

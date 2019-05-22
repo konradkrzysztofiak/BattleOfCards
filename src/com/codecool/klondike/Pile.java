@@ -14,11 +14,20 @@ public class Pile extends Pane {
     private String name;
     private double cardGap;
     private ObservableList<Card> cards = FXCollections.observableArrayList();
+    private int ownerID;
 
     public Pile(PileType pileType, String name, double cardGap) {
         this.name = name;
         this.pileType = pileType;
         this.cardGap = cardGap;
+    }
+
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
+    }
+
+    public int getOwnerID() {
+        return ownerID;
     }
 
     public PileType getPileType() {
@@ -94,7 +103,7 @@ public class Pile extends Pane {
 
     public enum PileType {
         PLAYERS,
-        WINCARDS,
+        WONCARDS,
         FIGHTPLAYER2
     }
 }
