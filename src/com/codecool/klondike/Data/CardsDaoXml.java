@@ -36,8 +36,8 @@ public class CardsDaoXml implements CardsDao  {
             if(node.getNodeType() == Node.ELEMENT_NODE){
                 Element element = (Element) node;
                 Card card = new Card(
-                        Integer.parseInt(element.getElementsByTagName("Army").item(0).getTextContent()),
-                        Integer.parseInt(element.getElementsByTagName("Lands").item(0).getTextContent()),
+                        Integer.parseInt(element.getElementsByTagName("Strength").item(0).getTextContent()),
+                        Integer.parseInt(element.getElementsByTagName("Skills").item(0).getTextContent()),
                         Integer.parseInt(element.getElementsByTagName("Money").item(0).getTextContent()),
                         Integer.parseInt(element.getElementsByTagName("Influence").item(0).getTextContent()),
                         element.getElementsByTagName("CardName").item(0).getTextContent()
