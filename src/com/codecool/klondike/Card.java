@@ -20,8 +20,8 @@ public class Card extends ImageView {
 
     static Image cardBackImage;
     private static final Map<String, Image> cardFaceImages = new HashMap<>();
-    public static final int WIDTH = 150;
-    public static final int HEIGHT = 215;
+    public static final int WIDTH = 200;
+    public static final int HEIGHT = 280;
 
     public Card(Suit suit, Rank rank, boolean faceDown) {
         this.suit = suit;
