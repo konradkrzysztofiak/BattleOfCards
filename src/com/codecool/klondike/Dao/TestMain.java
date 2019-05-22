@@ -1,4 +1,4 @@
-package com.codecool.klondike.Data;
+package com.codecool.klondike.Dao;
 
 public class TestMain {
     public static void main(String[] args){

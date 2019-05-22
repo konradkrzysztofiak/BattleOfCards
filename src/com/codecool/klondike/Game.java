@@ -50,11 +50,11 @@ public class Game extends Pane {
 //                player1TopCard.moveToPile(player2Fight);
 //                player2TopCard.moveToPile(player2Fight);
 //            }
-            if(card.isFaceDown()) {
+            if (card.isFaceDown()) {
                 card.flip();
             }
 
-        }else if (card.getContainingPile().getPileType() == Pile.PileType.PLAYER2) {
+        } else if (card.getContainingPile().getPileType() == Pile.PileType.PLAYER2) {
 //            if(isMoveValid(player1Pile, player2Pile)) {
 //                player1TopCard.moveToPile(player1Fight);
 //                player2TopCard.moveToPile(player1Fight);
@@ -62,13 +62,12 @@ public class Game extends Pane {
 //                player1TopCard.moveToPile(player2Fight);
 //                player2TopCard.moveToPile(player2Fight);
 //            }
-            if(card.isFaceDown()) {
+            if (card.isFaceDown()) {
                 card.flip();
             }
         }
 
     };
-
 
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -81,11 +80,11 @@ public class Game extends Pane {
         Card player2TopCard = player2Pile.getTopCard();
 
         if (!player2TopCard.isFaceDown() && player1TopCard.getRank() > player2TopCard.getRank()
-                && !player2TopCard.isFaceDown()  ) {
+                && !player2TopCard.isFaceDown()) {
 
             return true;
         } else if (player2TopCard.getRank() > player1TopCard.getRank() && !player1TopCard.isFaceDown()
-                && !player2TopCard.isFaceDown()   ) {
+                && !player2TopCard.isFaceDown()) {
 
 
             return false;
@@ -94,8 +93,6 @@ public class Game extends Pane {
         return false;
         //return true;
     }
-
-
 
 
     public Game() {
@@ -110,7 +107,6 @@ public class Game extends Pane {
 
 
     }
-
 
 
     public void refillStockFromDiscard() {
@@ -142,14 +138,13 @@ public class Game extends Pane {
 //    }
 
 
-
     private void initPiles(int howManyPlayers, String[] names) {
         //todo
         initPlayerPiles(howManyPlayers, names);
 
-        }
+    }
 
-    private void initPlayerPiles(int howManyPlayers, String[] names){
+    private void initPlayerPiles(int howManyPlayers, String[] names) {
         //todo
 
         for (int i = 0; i < howManyPlayers; i++) {
@@ -180,7 +175,7 @@ public class Game extends Pane {
                 player2Fight.setLayoutX(800);
                 player2Fight.setLayoutY(275);
                 getChildren().add(player2Fight);
-            } else if (howManyPlayers == 3){
+            } else if (howManyPlayers == 3) {
                 //todo
             } else if (howManyPlayers == 4) {
                 //todo
@@ -188,7 +183,6 @@ public class Game extends Pane {
                 System.out.println("Something went wrong!");
             }
         }
-
 
 
     }
@@ -208,13 +202,13 @@ public class Game extends Pane {
     private void dealCardsToPlayers(Iterator<Card> deckIterator) {
         int amountOfCards = 52;
         int howManyPlayers = 2;
-            for (int i = 0; i < amountOfCards / howManyPlayers; i++) {
-                Card card = deckIterator.next();
-                addMouseEventHandlers(card);
-                player1Pile.addCard(card);
-                //player1Pile.getTopCard().flip();
-                getChildren().add(card);
-            }
+        for (int i = 0; i < amountOfCards / howManyPlayers; i++) {
+            Card card = deckIterator.next();
+            addMouseEventHandlers(card);
+            player1Pile.addCard(card);
+            //player1Pile.getTopCard().flip();
+            getChildren().add(card);
+        }
 
         deckIterator.forEachRemaining(card -> {
             player2Pile.addCard(card);
@@ -226,7 +220,6 @@ public class Game extends Pane {
 
     }
     //}
-
 
 
     public void setTableBackground(Image tableBackground) {

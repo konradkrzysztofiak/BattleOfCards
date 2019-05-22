@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import com.codecool.klondike.Dao.CardsDaoXml;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -33,16 +34,16 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
 
-        String musicFile = "got.mp3";
+        /*String musicFile = "got.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        mediaPlayer.play();*/
         // MENU --------------------------------------------------------
 
         Button buttonPlay = new Button("Play");
         buttonPlay.setOnAction(e -> {
             window.setScene(gameScene);
-            mediaPlayer.stop();
+          //  mediaPlayer.stop();
         });
 
         Label label1 = new Label("Name:");
@@ -56,8 +57,8 @@ public class Main extends Application {
         menuScene = new Scene(layout, 640, 480);
 
         // GAME --------------------------------------------------------
-
-        Card.loadCardImages();
+        Card card = new Card();
+        card.loadCardImages();
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
 
