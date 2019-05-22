@@ -125,7 +125,6 @@ public class Game extends Pane {
 //        }
         //discardPile.clear();
         System.out.println("Stock refilled from discard pile.");
-
     }
 
 //    private boolean isMoveValid(Card card, Pile destPile) {
@@ -158,27 +157,27 @@ public class Game extends Pane {
                 player1Pile = new Pile(Pile.PileType.PLAYER1, names[i], PLAYER_GAP);
                 player1Pile.setBlurredBackground();
                 player1Pile.setLayoutX(95);
-                player1Pile.setLayoutY(20);
+                player1Pile.setLayoutY(35);
                 //player1Pile.setOnMouseClicked(stockReverseCardsHandler);
                 getChildren().add(player1Pile);
 
                 player2Pile = new Pile(Pile.PileType.PLAYER2, names[i], PLAYER_GAP);
                 player2Pile.setBlurredBackground();
-                player2Pile.setLayoutX(1150);
-                player2Pile.setLayoutY(20);
+                player2Pile.setLayoutX(985);
+                player2Pile.setLayoutY(35);
                 //player2Pile.setOnMouseClicked(stockReverseCardsHandler);
                 getChildren().add(player2Pile);
 
                 player1Fight = new Pile(Pile.PileType.FIGHTPLAYER1, names[i] + " Fight pile", FIGHT_GAP);
                 player1Fight.setBlurredBackground();
-                player1Fight.setLayoutX(450);
-                player1Fight.setLayoutY(275);
+                player1Fight.setLayoutX(320);
+                player1Fight.setLayoutY(35);
                 getChildren().add(player1Fight);
 
                 player2Fight = new Pile(Pile.PileType.FIGHTPLAYER2, names[i] + " Fight pile", FIGHT_GAP);
                 player2Fight.setBlurredBackground();
-                player2Fight.setLayoutX(800);
-                player2Fight.setLayoutY(275);
+                player2Fight.setLayoutX(760);
+                player2Fight.setLayoutY(35);
                 getChildren().add(player2Fight);
             } else if (howManyPlayers == 3){
                 //todo
