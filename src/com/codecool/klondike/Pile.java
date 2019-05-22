@@ -92,6 +92,7 @@ public class Pile extends Pane {
     }
 
     public enum PileType {
+        PLAYER,
         PLAYER1,
         PLAYER2,
         FIGHTPLAYER1,
