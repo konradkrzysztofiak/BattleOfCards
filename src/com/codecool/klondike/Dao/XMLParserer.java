@@ -1,4 +1,4 @@
-package com.codecool.klondike.Data;
+package com.codecool.klondike.Dao;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;

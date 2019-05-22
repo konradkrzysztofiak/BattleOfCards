@@ -1,4 +1,4 @@
-package com.codecool.klondike.Data;
+package com.codecool.klondike.Dao;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -7,6 +7,8 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.codecool.klondike.Card;
 
 public class CardsDaoXml implements CardsDao  {
     private ArrayList<Card> cards;
@@ -50,7 +52,7 @@ public class CardsDaoXml implements CardsDao  {
     @Override
     public NodeList getCardParameters(){
         XMLParserer xmlParserer = new XMLParserer();
-        xmlParserer.loadXmlDoc("/home/michal/IdeaProjects/BattleOfCards/src/com/codecool/klondike/Data/XmlCards.xml");
+        xmlParserer.loadXmlDoc("resources/Xml/XmlCards.xml");
         Document document = xmlParserer.getDocument();
         return document.getElementsByTagName("Card");
 

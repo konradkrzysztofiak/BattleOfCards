@@ -19,11 +19,14 @@ public class Game extends Pane {
 
     private List<Card> deck = new ArrayList<>();
 
-    private Pile player1Pile;
+    //private Pile player1Pile;
     //private List<playersPiles> playersPiles = new ArrayList<>();
-    private Pile player2Pile;
-    private Pile player1Fight;
-    private Pile player2Fight;
+    //private Pile player2Pile;
+    Card player1TopCard;
+    Card player2TopCard;
+    private List<Pile> playersPiles = FXCollections.observableArrayList();
+    //private Pile player1Fight;
+    //private Pile player2Fight;
     private String[] names = {"Eugeniusz", "Mieczyslaw"};
     private Main main = new Main();
 
@@ -36,8 +39,8 @@ public class Game extends Pane {
     private static double FIGHT_GAP = 1;
 
     private EventHandler<KeyEvent> handler = event -> {
-        Card player1TopCard = player1Pile.getTopCard();
-        Card player2TopCard = player2Pile.getTopCard();
+        //Card player1TopCard = player1Pile.getTopCard();
+        //Card player2TopCard = player2Pile.getTopCard();
         switch (event.getCode()) {
             case Q:
                 System.out.println("up");
@@ -63,12 +66,28 @@ public class Game extends Pane {
         int i = 0;
 
 
+
         Card card = (Card) e.getSource();
-        Card player1TopCard = player1Pile.getTopCard();
-        Card player2TopCard = player2Pile.getTopCard();
+        System.out.println(card.getContainingPile().getName());
+
+        for(Pile playerPile : playersPiles){
+            if(card.getContainingPile().getName().equals(names[0])){
+                Card player1TopCard = playerPile.getTopCard();
+                if(card == player1TopCard && card.isFaceDown()) {
+                    player1TopCard.flip();
+                }
+            } else if(card.getContainingPile().getName().equals(names[1])){
+                Card player2TopCard = playerPile.getTopCard();
+                if(card.isFaceDown()) {
+                    card.flip();
+                }
+            }
+        }
+
+        //Card player2TopCard = player2Pile.getTopCard();
         //todo
         //jedna karta odkryta/ kolejny gracz ma ruch iterator albo najlepiej klase playera
-        if (card.getContainingPile().getPileType() == Pile.PileType.PLAYER1) {
+        if (card.getContainingPile().getPileType() == Pile.PileType.PLAYERS) {
 //            if(isMoveValid(player1Pile, player2Pile)) {
 //                player1TopCard.moveToPile(player1Fight);
 //                player2TopCard.moveToPile(player1Fight);
@@ -81,7 +100,7 @@ public class Game extends Pane {
             }
 
 
-        }else if (card.getContainingPile().getPileType() == Pile.PileType.PLAYER2) {
+        }else if (card.getContainingPile().getPileType() == Pile.PileType.PLAYERS) {
 //            if(isMoveValid(player1Pile, player2Pile)) {
 //                player1TopCard.moveToPile(player1Fight);
 //                player2TopCard.moveToPile(player1Fight);
@@ -89,9 +108,7 @@ public class Game extends Pane {
 //                player1TopCard.moveToPile(player2Fight);
 //                player2TopCard.moveToPile(player2Fight);
 //            }
-            if(card.isFaceDown()) {
-                card.flip();
-            }
+
         }
 
     };
@@ -99,32 +116,32 @@ public class Game extends Pane {
 
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
-        if (player1Pile.isEmpty()) {
-            Pile activePile = player1Pile;
-            Pile previousPile = player1Fight;
-            refillStockFromDiscard(activePile, previousPile);
-        } else if (player2Pile.getPileType() == Pile.PileType.PLAYER2) {
-            Pile activePile = player2Pile;
-            Pile previousPile = player2Fight;
-            System.out.println("elo");
-            refillStockFromDiscard(activePile, previousPile);
-        }
+//        if (player1Pile.isEmpty()) {
+//            Pile activePile = player1Pile;
+//            Pile previousPile = player1Fight;
+//            refillStockFromDiscard(activePile, previousPile);
+//        } else if (player2Pile.getPileType() == Pile.PileType.PLAYERS) {
+//            Pile activePile = player2Pile;
+//            Pile previousPile = player2Fight;
+//            System.out.println("elo");
+//            refillStockFromDiscard(activePile, previousPile);
+//        }
 
     };
 
     private void checkWinnerOfRound(Card player1Card, Card player2Card){
-        if(player1Card.getRank() > player2Card.getRank()){
-            player1Card.moveToPile(player1Fight);
-            player2Card.moveToPile(player1Fight);
-            player1Card.flip();
-            player2Card.flip();
-        } else {
-            player1Card.moveToPile(player2Fight);
-            player2Card.moveToPile(player2Fight);
-            player1Card.flip();
-            player2Card.flip();
+        //if(player1Card.getRank() > player2Card.getRank()){
+//            player1Card.moveToPile(player1Fight);
+//            player2Card.moveToPile(player1Fight);
+//            player1Card.flip();
+//            player2Card.flip();
+        //} else {
+//            player1Card.moveToPile(player2Fight);
+//            player2Card.moveToPile(player2Fight);
+//            player1Card.flip();
+//            player2Card.flip();
 
-        }
+       // }
 
     }
     private boolean isMoveValid(Pile player1Pile, Pile player2Pile) {
@@ -208,32 +225,37 @@ public class Game extends Pane {
 
         for (int i = 0; i < howManyPlayers; i++) {
             String player = "PLAYER" + i;
+            int[] coordinates = {95, 1150};
             if (howManyPlayers == 2) {
-                player1Pile = new Pile(Pile.PileType.PLAYER1, names[i], PLAYER_GAP);
-                player1Pile.setBlurredBackground();
-                player1Pile.setLayoutX(95);
-                player1Pile.setLayoutY(20);
-                player1Pile.setOnMouseClicked(stockReverseCardsHandler);
-                getChildren().add(player1Pile);
+                Pile playerPile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
+                //player1Pile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
+                playerPile.setBlurredBackground();
+                playerPile.setLayoutX(coordinates[i]);
+                playerPile.setLayoutY(20);
+                playerPile.setOnMouseClicked(stockReverseCardsHandler);
+                playersPiles.add(playerPile);
+                getChildren().add(playerPile);
 
-                player2Pile = new Pile(Pile.PileType.PLAYER2, names[i], PLAYER_GAP);
-                player2Pile.setBlurredBackground();
-                player2Pile.setLayoutX(1150);
-                player2Pile.setLayoutY(20);
-                player2Pile.setOnMouseClicked(stockReverseCardsHandler);
-                getChildren().add(player2Pile);
+//                player2Pile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
+//                player2Pile.setBlurredBackground();
+//                player2Pile.setLayoutX(coordinates[i]);
+//                player2Pile.setLayoutY(20);
+//                player2Pile.setOnMouseClicked(stockReverseCardsHandler);
+//                getChildren().add(player2Pile);
 
-                player1Fight = new Pile(Pile.PileType.FIGHTPLAYER1, names[i] + " Fight pile", FIGHT_GAP);
-                player1Fight.setBlurredBackground();
-                player1Fight.setLayoutX(320);
-                player1Fight.setLayoutY(20);
-                getChildren().add(player1Fight);
 
-                player2Fight = new Pile(Pile.PileType.FIGHTPLAYER2, names[i] + " Fight pile", FIGHT_GAP);
-                player2Fight.setBlurredBackground();
-                player2Fight.setLayoutX(930);
-                player2Fight.setLayoutY(20);
-                getChildren().add(player2Fight);
+
+//                player1Fight = new Pile(Pile.PileType.WINCARDS, names[i] + " Fight pile", FIGHT_GAP);
+//                player1Fight.setBlurredBackground();
+//                player1Fight.setLayoutX(320);
+//                player1Fight.setLayoutY(20);
+//                getChildren().add(player1Fight);
+//
+//                player2Fight = new Pile(Pile.PileType.FIGHTPLAYER2, names[i] + " Fight pile", FIGHT_GAP);
+//                player2Fight.setBlurredBackground();
+//                player2Fight.setLayoutX(930);
+//                player2Fight.setLayoutY(20);
+//                getChildren().add(player2Fight);
             } else if (howManyPlayers == 3){
                 //todo
             } else if (howManyPlayers == 4) {
@@ -260,25 +282,23 @@ public class Game extends Pane {
     }
 
     private void dealCardsToPlayers(Iterator<Card> deckIterator) {
-        int amountOfCards = 52;
+        int amountOfCards = 28;
         int howManyPlayers = 2;
+        for (Pile playerPile : playersPiles) {
             for (int i = 0; i < amountOfCards / howManyPlayers; i++) {
                 Card card = deckIterator.next();
                 addMouseEventHandlers(card);
-                player1Pile.addCard(card);
+                playerPile.addCard(card);
                 //player1Pile.getTopCard().flip();
                 getChildren().add(card);
             }
 
-        deckIterator.forEachRemaining(card -> {
-            player2Pile.addCard(card);
-            //player2Pile.getTopCard().flip();
-            addMouseEventHandlers(card);
-            getChildren().add(card);
-        });
+
 
 
     }
+
+}
     //}
 
 
