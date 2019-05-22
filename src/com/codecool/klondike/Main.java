@@ -19,8 +19,8 @@ import java.io.File;
 
 public class Main extends Application {
 
-    private static final double WINDOW_WIDTH = 1400;
-    private static final double WINDOW_HEIGHT = 900;
+    private static final double WINDOW_WIDTH = 1920;
+    private static final double WINDOW_HEIGHT = 1080;
 
     Stage window;
     Scene menuScene, gameScene;
