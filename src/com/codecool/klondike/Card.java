@@ -10,14 +10,13 @@ import java.util.*;
 
 public class Card extends ImageView {
 
-    private Suit suit;
-    private Rank rank;
     private boolean faceDown;
 
-    private int army;
-    private int land;
+    private int str;
+    private int skills;
     private int money;
     private int influence;
+    private int companion;
     private String name;
 
     private Image backFace;
@@ -32,11 +31,12 @@ public class Card extends ImageView {
 
     private CardsDaoXml cardsDaoXml = new CardsDaoXml();
 
-    public Card(int army, int land, int money, int influence, String name) {
-        this.army = army;
-        this.land = land;
+    public Card(int str, int skills, int money, int influence, int companion, String name) {
+        this.str = str;
+        this.skills = skills;
         this.money = money;
         this.influence = influence;
+        this.companion = companion;
         this.name = name;
         this.faceDown = true;
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
@@ -48,24 +48,15 @@ public class Card extends ImageView {
 
     public Card() {
         cardsDaoXml.addCards();
-
     }
 
-    public int getSuit() {
-        return suit.getSuit();
+    public int getCompanion() {
+        return companion;
     }
 
-    public int getRank() {
-        return rank.getValue();
-    }
+    public int getStr() { return str; }
 
-    public int getArmy() {
-        return army;
-    }
-
-    public int getLand() {
-        return land;
-    }
+    public int getSkills() { return skills; }
 
     public int getMoney() {
         return money;
@@ -111,29 +102,13 @@ public class Card extends ImageView {
 
     @Override
     public String toString() {
-        return "The " + "Rank " + rank + " of " + "Suit " + suit;
-    }
-
-    public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
-        if (card1.suit.getColor() != card2.suit.getColor())
-            return true;
-        else
-            return false;
-    }
-
-    public static boolean isSameSuit(Card card1, Card card2) {
-        return card1.getSuit() == card2.getSuit();
+        return str + " " + skills + " " + money + " " + influence + " " + companion + " ";
     }
 
     public static List createNewDeck() {
         CardsDaoXml cardsDaoXml = new CardsDaoXml();
         cardsDaoXml.addCards();
         return cardsDaoXml.getCards();
-    }
-
-    public static boolean checkIsCardLower(Card lower, Card higher) {
-        return (higher.getRank() == lower.getRank() + 1);
     }
 
     public void loadCardImages() {

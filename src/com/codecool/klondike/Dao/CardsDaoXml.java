@@ -42,6 +42,7 @@ public class CardsDaoXml implements CardsDao  {
                         Integer.parseInt(element.getElementsByTagName("Skills").item(0).getTextContent()),
                         Integer.parseInt(element.getElementsByTagName("Money").item(0).getTextContent()),
                         Integer.parseInt(element.getElementsByTagName("Influence").item(0).getTextContent()),
+                        Integer.parseInt(element.getElementsByTagName("Companion").item(0).getTextContent()),
                         element.getElementsByTagName("CardName").item(0).getTextContent()
                 );
                 cards.add(card);

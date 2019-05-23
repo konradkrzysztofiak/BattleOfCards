@@ -4,12 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -17,8 +20,8 @@ import java.util.List;
 
 public class Game extends Pane {
 
-    private List<Card> deck = new ArrayList<>();
-    private Card player1TopCard;
+    private List<Card> deck;
+    public Card player1TopCard;
     private Card player2TopCard;
     private Player player1;
     private Player player2;
@@ -27,21 +30,48 @@ public class Game extends Pane {
     private List<Pile> wonCardsPiles = FXCollections.observableArrayList();
     private static double PLAYER_GAP = 1;
     private static double WONCARDS_GAP = 1;
+    private Scene gameScene;
+    private Label labelPlayer1;
+    private Label labelPlayer2;
+
+    public List cardInfoPlayer1 = new ArrayList();
+    public List cardInfoPlayer2 = new ArrayList();
+
 
     public Game() {
-
         deck = Card.createNewDeck();
         initPiles(2, this.names);
-        addEventHandler(KeyEvent.KEY_PRESSED, handler);
         dealCards();
         player1.setTurn(true);
+    }
+
+
+    public void fillCardInfo()
+    {
+        if(player1.hasTurn()) {
+            cardInfoPlayer1.add(String.valueOf(player1TopCard.getStr()));
+            cardInfoPlayer1.add(String.valueOf(player1TopCard.getSkills()));
+            cardInfoPlayer1.add(String.valueOf(player1TopCard.getMoney()));
+            cardInfoPlayer1.add(String.valueOf(player1TopCard.getInfluence()));
+            cardInfoPlayer1.add(String.valueOf(player1TopCard.getCompanion()));
+        } else {
+            cardInfoPlayer2.add(String.valueOf(player2TopCard.getStr()));
+            cardInfoPlayer2.add(String.valueOf(player2TopCard.getSkills()));
+            cardInfoPlayer2.add(String.valueOf(player2TopCard.getMoney()));
+            cardInfoPlayer2.add(String.valueOf(player2TopCard.getInfluence()));
+            cardInfoPlayer2.add(String.valueOf(player2TopCard.getCompanion()));
+        }
+    }
+
+    public void setGameScene(Scene gameScene)
+    {
+        this.gameScene = gameScene;
     }
 
     public void addMouseEventHandlers(Card card) {
 
         card.setOnMouseClicked(onMouseClickedHandler);
         //card.setOnMouseMoved(onMouseMovedHandler);
-
     }
 
     private EventHandler<KeyEvent> handler = event -> {
@@ -58,6 +88,7 @@ public class Game extends Pane {
                 break;
             case R:
                 System.out.println("right");
+
                 break;
             case ENTER:
                 if (!player1TopCard.isFaceDown() && !player2TopCard.isFaceDown())
@@ -69,22 +100,28 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
     //todo
         Card card = (Card) e.getSource();
+        gameScene.addEventHandler(KeyEvent.KEY_PRESSED, handler);
 
         if(isMoveValid(card)) {
+            cardInfoPlayer1.clear();
+            cardInfoPlayer2.clear();
+            fillCardInfo();
             //if(card == player1TopCard && card.isFaceDown()) {
             if (card == player1TopCard) {
+                System.out.println(player1TopCard.getName());
                 player1TopCard.flip();
+                Main.player1Label(cardInfoPlayer1, labelPlayer1);
                 player1.setTurn(false);
                 player2.setTurn(true);
             } else if (card == player2TopCard) {
                 player2TopCard.flip();
+                Main.player2Label(cardInfoPlayer2, labelPlayer2);
                 player2.setTurn(false);
                 player1.setTurn(false);
             }
         }
-
-
     };
+
     private boolean isMoveValid(Card card){
         if(player1.hasTurn()) {
             player1TopCard = card.getContainingPile().getTopCard();
@@ -118,7 +155,6 @@ public class Game extends Pane {
 //            player2Card.flip();
 
        // }
-
     }
 
 
@@ -178,26 +214,19 @@ public class Game extends Pane {
                 System.out.println("Something went wrong!");
             }
         }
-
-
-
     }
+
     private void createPlayers(int howManyPlayers, String[] names){
         player1 = new Player(0,0);
         player2 = new Player(1,0);
 
     }
-    //}
 
     public void dealCards() {
         Collections.shuffle(deck);
         Iterator<Card> deckIterator = deck.iterator();
         dealCardsToPlayers(deckIterator);
         //dealCardsToPlayer2(deckIterator);
-
-        //TODO
-
-
     }
 
     private void dealCardsToPlayers(Iterator<Card> deckIterator) {
@@ -211,16 +240,9 @@ public class Game extends Pane {
                 //player1Pile.getTopCard().flip();
                 getChildren().add(card);
             }
-
-
-
-
     }
 
 }
-    //}
-
-
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
@@ -234,5 +256,13 @@ public class Game extends Pane {
 
         }
     };
+
+    public void setGameLabelPlayer1(Label labelPlayer1) {
+        this.labelPlayer1 = labelPlayer1;
+    }
+    public void setGameLabelPlayer2(Label labelPlayer2) {
+        this.labelPlayer2 = labelPlayer2;
+    }
+
 
 }
