@@ -1,87 +1,116 @@
 package com.codecool.klondike;
 
-import com.codecool.klondike.Dao.CardsDaoXml;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.Popup;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.awt.event.ActionEvent;
-import java.io.File;
 
 
 public class Main extends Application {
 
-    private static final double WINDOW_WIDTH = 1400;
-    private static final double WINDOW_HEIGHT = 900;
+    private static final double WINDOW_WIDTH = 1280;
+    private static final double WINDOW_HEIGHT = 720;
 
     Stage window;
     Scene menuScene, gameScene;
+    Label labelPlayer1 = new Label("Player 1");
 
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         window = primaryStage;
 
-        /*String musicFile = "got.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();*/
+        //SoundPlayer soundPlayer = new SoundPlayer();
+        //soundPlayer.Play(0);
+
         // MENU --------------------------------------------------------
+        Button twoPlayers = new Button("2 Players");
+        //Button fourPlayers = new Button("4 Players");
 
-        Button buttonPlay = new Button("Play");
-        buttonPlay.setOnAction(e -> {
+        twoPlayers.setOnAction(e -> {
             window.setScene(gameScene);
-          //  mediaPlayer.stop();
+         //   soundPlayer.Stop();
+         //   soundPlayer.Play(1);
         });
+        //---------------------------------------------------------------
+        //fourPlayers.setOnAction(e -> {
+        //    window.setScene(gameScene);
+        //});
 
-        Label label1 = new Label("Name:");
-        TextField textField = new TextField ();
-        label1.setPadding(new Insets(50, 10, 10, 10));
-        textField.setPrefWidth(80);
+        // player 1
+        //  Label labelPlayer1 = new Label("Player 1");
+        labelPlayer1.setLayoutX(110);
+        labelPlayer1.setLayoutY(350);
+        labelPlayer1.setFont(new Font(40));
+        labelPlayer1.setTextFill(Color.web("#FFFFFF"));
+
+        //player 2
+        Label labelPlayer2 = new Label("Player 2");
+        labelPlayer2.setLayoutX(1000);
+        labelPlayer2.setLayoutY(350);
+        labelPlayer2.setFont(new Font(40));
+        labelPlayer2.setTextFill(Color.web("#FFFFFF"));
+
+        // VS label
+        Label versus = new Label("VS");
+        versus.setLayoutX((WINDOW_WIDTH / 2) - 25);
+        versus.setLayoutY(WINDOW_HEIGHT / 5);
+        versus.setFont(new Font(50));
+        versus.setTextFill(Color.web("#FFFFFF"));
+
+        // Statistics label
+        Label stats = new Label("Statistics");
+        stats.setLayoutX((WINDOW_WIDTH / 2) - 100);
+        stats.setLayoutY((WINDOW_HEIGHT / 2) + 20);
+        stats.setFont(new Font(40));
+        stats.setTextFill(Color.web("#FFFFFF"));
+
+        // stats label
+        Label str = new Label("");
+        str.setLayoutX((WINDOW_WIDTH / 2) - 120);
+        str.setLayoutY((WINDOW_HEIGHT / 2) + 20);
+        str.setFont(new Font(40));
+        str.setTextFill(Color.web("#FFFFFF"));
+
 
         VBox layout = new VBox(50);
+        BackgroundImage myBI= new BackgroundImage(new Image("/table/green.png",640,480, false,true),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
 
-        layout.getChildren().addAll(buttonPlay, label1, textField);
-        menuScene = new Scene(layout, 640, 480);
+        layout.setBackground(new Background(myBI));
+
+        layout.getChildren().addAll(twoPlayers);
+        menuScene = new Scene(layout, 300, 300);
 
         // GAME --------------------------------------------------------
         Card card = new Card();
         card.loadCardImages();
         Game game = new Game();
-        game.setTableBackground(new Image("/table/background.png"));
-
-        Button reset = new Button("Reset");
-        Button nextRound = new Button("Next Round");
-
-        Main main = new Main();
-        reset.setOnAction(e -> {
-            try {
-                main.start(primaryStage);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-
+        game.setTableBackground(new Image("table/green.png"));
+        //game.setTableBackground(background);
 
         gameScene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
+        primaryStage.setResizable(false);
+        // ------------- HUD --------------------------------------------
 
-        game.getChildren().addAll(reset);
+        game.getChildren().addAll(labelPlayer1, labelPlayer2, versus, stats, str);
+
+        //---------------------------------------------------------------
+
         window.setTitle("Battle of Cards");
         window.setScene(menuScene);
         window.show();
     }
+
+
 
 }

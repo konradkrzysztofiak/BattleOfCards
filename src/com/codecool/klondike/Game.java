@@ -75,6 +75,8 @@ public class Game extends Pane {
             player1TopCard = card.getContainingPile().getTopCard();
             System.out.println(player1TopCard.getName());
             System.out.println("elo");
+            Main main = new Main();
+            main.labelPlayer1.setText("Ugabuga");
             //if(card == player1TopCard && card.isFaceDown()) {
             if(card == player1TopCard) {
                 player1TopCard.flip();
