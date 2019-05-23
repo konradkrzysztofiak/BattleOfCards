@@ -3,7 +3,7 @@ package com.codecool.klondike;
 public class Player {
     //private String nickname;
     private int id;
-    private boolean turn = false;
+    private boolean turn = true;
     private int score = 0;
     private boolean isPlayerAllive;
 

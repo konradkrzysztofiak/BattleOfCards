@@ -11,8 +11,8 @@ import java.util.*;
 public class Card extends ImageView {
     private boolean faceDown;
 
-    private int army;
-    private int land;
+    private int Strength;
+    private int Skills;
     private int money;
     private int influence;
     private String name;
@@ -29,9 +29,9 @@ public class Card extends ImageView {
 
     private CardsDaoXml cardsDaoXml = new CardsDaoXml();
 
-    public Card(int army, int land, int money, int influence, String name) {
-        this.army = army;
-        this.land = land;
+    public Card(int Strength, int Skills, int money, int influence, String name) {
+        this.Strength = Strength;
+        this.Skills = Skills;
         this.money = money;
         this.influence = influence;
         this.name = name;
@@ -48,12 +48,12 @@ public class Card extends ImageView {
 
     }
 
-    public int getArmy() {
-        return army;
+    public int getStrength() {
+        return Strength;
     }
 
-    public int getLand() {
-        return land;
+    public int getSkills() {
+        return Skills;
     }
 
     public int getMoney() {

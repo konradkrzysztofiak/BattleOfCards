@@ -27,6 +27,7 @@ public class Main extends Application {
     Stage window;
     Scene menuScene, gameScene;
 
+
     public static void main(String[] args) {
         launch(args);
     }
