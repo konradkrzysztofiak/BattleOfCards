@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import com.codecool.klondike.Dao.CardsDaoXml;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,12 @@ public class Card extends ImageView {
     private Rank rank;
     private boolean faceDown;
 
+    private int army;
+    private int land;
+    private int money;
+    private int influence;
+    private String name;
+
     private Image backFace;
     private Image frontFace;
     private Pile containingPile;
@@ -23,16 +30,25 @@ public class Card extends ImageView {
     public static final int WIDTH = 200;
     public static final int HEIGHT = 280;
 
-    public Card(Suit suit, Rank rank, boolean faceDown) {
-        this.suit = suit;
-        this.rank = rank;
-        this.faceDown = faceDown;
+    private CardsDaoXml cardsDaoXml = new CardsDaoXml();
+
+    public Card(int army, int land, int money, int influence, String name) {
+        this.army = army;
+        this.land = land;
+        this.money = money;
+        this.influence = influence;
+        this.name = name;
+        this.faceDown = true;
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
         backFace = cardBackImage;
-        System.out.println(getShortName());
-        frontFace = cardFaceImages.get(getShortName());
+        frontFace = cardFaceImages.get(name);
         setImage(faceDown ? backFace : frontFace);
         setEffect(dropShadow);
+    }
+
+    public Card() {
+        cardsDaoXml.addCards();
+
     }
 
     public int getSuit() {
@@ -43,12 +59,32 @@ public class Card extends ImageView {
         return rank.getValue();
     }
 
+    public int getArmy() {
+        return army;
+    }
+
+    public int getLand() {
+        return land;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public int getInfluence() {
+        return influence;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public boolean isFaceDown() {
         return faceDown;
     }
 
-    public String getShortName() {
-        return "S" + suit.getName() + "R" + rank.getValue();
+    public String getShortName(int index) {
+        return cardsDaoXml.getCard(index).getName();
     }
 
     public DropShadow getDropShadow() {
@@ -80,7 +116,7 @@ public class Card extends ImageView {
 
     public static boolean isOppositeColor(Card card1, Card card2) {
         //TODO
-        if(card1.suit.getColor() != card2.suit.getColor())
+        if (card1.suit.getColor() != card2.suit.getColor())
             return true;
         else
             return false;
@@ -90,35 +126,25 @@ public class Card extends ImageView {
         return card1.getSuit() == card2.getSuit();
     }
 
-    public static List<Card> createNewDeck() {
-        List<Card> result = new ArrayList<>();
-
-        for(Suit s : Suit.values())
-        {
-            for (Rank r : Rank.values())
-            {
-                result.add(new Card(s, r, true));
-            }
-        }
-        return result;
+    public static List createNewDeck() {
+        CardsDaoXml cardsDaoXml = new CardsDaoXml();
+        cardsDaoXml.addCards();
+        return cardsDaoXml.getCards();
     }
+
     public static boolean checkIsCardLower(Card lower, Card higher) {
         return (higher.getRank() == lower.getRank() + 1);
     }
 
-    public static void loadCardImages() {
+    public void loadCardImages() {
         cardBackImage = new Image("card_images/card_back.png");
-
-        for(Suit s : Suit.values())
-        {
-            for (Rank r : Rank.values())
-            {
-                String cardName = s.getName() + r.getValue();
-                String cardId = "S" + s.getName() + "R" + r.getValue();
-                String imageFileName = "card_images/" + cardName + ".png";
-                cardFaceImages.put(cardId, new Image(imageFileName));
-            }
+        System.out.println(cardsDaoXml.getCards().size());
+        for (int i = 0; i < cardsDaoXml.getCards().size(); i++) {
+            String cardName = cardsDaoXml.getCard(i).getName();
+            String cardId = cardsDaoXml.getCard(i).getName();
+            String imageFileName = "card_images/" + cardName + ".png";
+            cardFaceImages.put(cardId, new Image(imageFileName));
+            System.out.println(cardName);
         }
     }
-
 }

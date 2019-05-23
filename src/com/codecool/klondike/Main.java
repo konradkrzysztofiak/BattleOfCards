@@ -91,10 +91,11 @@ public class Main extends Application {
         menuScene = new Scene(layout, 300, 300);
 
         // GAME --------------------------------------------------------
-        Card.loadCardImages();
+        Card card = new Card();
+        card.loadCardImages();
+
         Game game = new Game();
         game.setTableBackground(new Image("/table/background.gif"));
-        //game.setTableBackground(background);
 
         gameScene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.setResizable(false);
