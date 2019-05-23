@@ -143,9 +143,7 @@ public class Game extends Pane {
 
 
     private void initPiles(int howManyPlayers, String[] names) {
-        //todo
         initPlayerPiles(howManyPlayers, names);
-
         }
 
     private void initPlayerPiles(int howManyPlayers, String[] names){

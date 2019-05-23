@@ -6,14 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Main extends Application {
@@ -29,29 +24,26 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         window = primaryStage;
-        AtomicInteger playersAmount = new AtomicInteger();
 
-        String musicFile = "got.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        SoundPlayer soundPlayer = new SoundPlayer();
+        soundPlayer.Play("got.mp3");
+
         // MENU --------------------------------------------------------
         Button twoPlayers = new Button("2 Players");
-        Button fourPlayers = new Button("4 Players");
+        //Button fourPlayers = new Button("4 Players");
 
         twoPlayers.setOnAction(e -> {
             window.setScene(gameScene);
-            playersAmount.set(2);
-            mediaPlayer.stop();
+            soundPlayer.Stop();
+            soundPlayer.Play("gamemusic.mp3");
         });
+        //---------------------------------------------------------------
+        //fourPlayers.setOnAction(e -> {
+        //    window.setScene(gameScene);
+        //});
 
-        fourPlayers.setOnAction(e -> {
-            window.setScene(gameScene);
-            playersAmount.set(4);
-            mediaPlayer.stop();
-        });
         // player 1
         Label labelPlayer1 = new Label("Player 1");
         labelPlayer1.setLayoutX(110);
@@ -95,14 +87,14 @@ public class Main extends Application {
 
         layout.setBackground(new Background(myBI));
 
-        layout.getChildren().addAll(twoPlayers, fourPlayers);
+        layout.getChildren().addAll(twoPlayers);
         menuScene = new Scene(layout, 300, 300);
 
         // GAME --------------------------------------------------------
-
         Card.loadCardImages();
         Game game = new Game();
-        game.setTableBackground(new Image("/table/background.png"));
+        game.setTableBackground(new Image("/table/background.gif"));
+        //game.setTableBackground(background);
 
         gameScene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.setResizable(false);
