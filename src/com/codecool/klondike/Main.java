@@ -61,7 +61,7 @@ public class Main extends Application {
         Card card = new Card();
         card.loadCardImages();
         Game game = new Game();
-        game.setTableBackground(new Image("/table/background.png"));
+        game.setTableBackground(new Image("/table/background.gif"));
 
         Button reset = new Button("Reset");
         Button nextRound = new Button("Next Round");

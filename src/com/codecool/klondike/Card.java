@@ -9,9 +9,6 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class Card extends ImageView {
-
-    private Suit suit;
-    private Rank rank;
     private boolean faceDown;
 
     private int army;
@@ -49,14 +46,6 @@ public class Card extends ImageView {
     public Card() {
         cardsDaoXml.addCards();
 
-    }
-
-    public int getSuit() {
-        return suit.getSuit();
-    }
-
-    public int getRank() {
-        return rank.getValue();
     }
 
     public int getArmy() {
@@ -109,31 +98,10 @@ public class Card extends ImageView {
         setImage(faceDown ? backFace : frontFace);
     }
 
-    @Override
-    public String toString() {
-        return "The " + "Rank " + rank + " of " + "Suit " + suit;
-    }
-
-    public static boolean isOppositeColor(Card card1, Card card2) {
-        //TODO
-        if (card1.suit.getColor() != card2.suit.getColor())
-            return true;
-        else
-            return false;
-    }
-
-    public static boolean isSameSuit(Card card1, Card card2) {
-        return card1.getSuit() == card2.getSuit();
-    }
-
     public static List createNewDeck() {
         CardsDaoXml cardsDaoXml = new CardsDaoXml();
         cardsDaoXml.addCards();
         return cardsDaoXml.getCards();
-    }
-
-    public static boolean checkIsCardLower(Card lower, Card higher) {
-        return (higher.getRank() == lower.getRank() + 1);
     }
 
     public void loadCardImages() {
