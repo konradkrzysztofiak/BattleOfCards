@@ -3,20 +3,24 @@ package com.codecool.klondike;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
 import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+
 
 import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.*;
+
 
 public class Game extends Pane {
 
@@ -30,12 +34,17 @@ public class Game extends Pane {
     private List<Pile> wonCardsPiles = FXCollections.observableArrayList();
     private static double PLAYER_GAP = 1;
     private static double WONCARDS_GAP = 1;
+
     private Scene gameScene;
     private Label labelPlayer1;
     private Label labelPlayer2;
 
     public List cardInfoPlayer1 = new ArrayList();
     public List cardInfoPlayer2 = new ArrayList();
+
+    private String stats = null;
+    private int lastTurnPlayerId;
+
 
 
     public Game() {
@@ -75,32 +84,73 @@ public class Game extends Pane {
     }
 
     private EventHandler<KeyEvent> handler = event -> {
-
         switch (event.getCode()) {
             case Q:
-                System.out.println("up");
+                if(!player1.hasTurn() && !player2.hasTurn()) {
+                    System.out.println("Strength");
+                    stats = "Strength";
+                    if (lastTurnPlayerId == player1.id()) {
+                        player2.setTurn(true);
+                    } else {
+                        player1.setTurn(true);
+                    }
+                }
                 break;
             case W:
-                System.out.println("down");
+                if(!player1.hasTurn() && !player2.hasTurn()) {
+                System.out.println("Skills");
+                stats = "Skills";
+                    if (lastTurnPlayerId == player1.id()) {
+                        player2.setTurn(true);
+                    } else {
+                        player1.setTurn(true);
+                    }
+                }
                 break;
             case E:
-                System.out.println("left");
+                if(!player1.hasTurn() && !player2.hasTurn()) {
+                System.out.println("Money");
+                stats = "Money";
+                    if (lastTurnPlayerId == player1.id()) {
+                        player2.setTurn(true);
+                    } else {
+                        player1.setTurn(true);
+                    }
+                }
                 break;
             case R:
-                System.out.println("right");
+
+                if(!player1.hasTurn() && !player2.hasTurn()) {
+                System.out.println("Influence");
+                stats = "Influence";
+                    if (lastTurnPlayerId == player1.id()) {
+                        player2.setTurn(true);
+                    } else {
+                        player1.setTurn(true);
+                    }
+                }
 
                 break;
             case ENTER:
-                if (!player1TopCard.isFaceDown() && !player2TopCard.isFaceDown())
-                checkWinnerOfRound(player1TopCard, player2TopCard);
+
+                if (stats != null) {
+                    if (!player1TopCard.isFaceDown() && !player2TopCard.isFaceDown()){
+                        checkWinnerOfRound(player1TopCard, player2TopCard, stats);
+                        stats = null;
+                        System.out.println("po win");
+                    }
+                }
                 break;
+
         }};
 
 
+
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
-    //todo
+        //todo
         Card card = (Card) e.getSource();
         gameScene.addEventHandler(KeyEvent.KEY_PRESSED, handler);
+
 
         if(isMoveValid(card)) {
             cardInfoPlayer1.clear();
@@ -109,52 +159,95 @@ public class Game extends Pane {
             //if(card == player1TopCard && card.isFaceDown()) {
             if (card == player1TopCard) {
                 System.out.println(player1TopCard.getName());
+
                 player1TopCard.flip();
                 Main.player1Label(cardInfoPlayer1, labelPlayer1);
                 player1.setTurn(false);
-                player2.setTurn(true);
-            } else if (card == player2TopCard) {
+                player2.setTurn(false);
+                this.lastTurnPlayerId = player1.id();
+            }
+
+        } else if (player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id()) {
+            player2TopCard = card.getContainingPile().getTopCard();
+            //if(card == player2TopCard && card.isFaceDown()) {
+            if (card == player2TopCard) {
                 player2TopCard.flip();
                 Main.player2Label(cardInfoPlayer2, labelPlayer2);
                 player2.setTurn(false);
-                player1.setTurn(false);
+                this.lastTurnPlayerId = player2.id();
+                //player1.setTurn(true);
             }
         }
     };
 
-    private boolean isMoveValid(Card card){
-        if(player1.hasTurn()) {
-            player1TopCard = card.getContainingPile().getTopCard();
-            return (card.getContainingPile().getOwnerID() == player1.id() &&
-                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
-        } else if (player2.hasTurn()){
-            player2TopCard = card.getContainingPile().getTopCard();
-            return (card.getContainingPile().getOwnerID() == player2.id() &&
-                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
+
+    private void checkWinnerOfRound(Card player1Card, Card player2Card, String stats) {
+        switch (stats) {
+            case "Strength":
+                if(player1Card.getStrength() > player2Card.getStrength()){
+                    player1Card.moveToPile(wonCardsPiles.get(0));
+                    player2Card.moveToPile(wonCardsPiles.get(0));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player1.setTurn(true);
+                } else {
+                    player1Card.moveToPile(wonCardsPiles.get(1));
+                    player2Card.moveToPile(wonCardsPiles.get(1));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player2.setTurn(true);
+                }
+                break;
+            case "Skills":
+                if(player1Card.getSkills() > player2Card.getSkills()){
+                    player1Card.moveToPile(wonCardsPiles.get(0));
+                    player2Card.moveToPile(wonCardsPiles.get(0));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player1.setTurn(true);
+                } else {
+                    player1Card.moveToPile(wonCardsPiles.get(1));
+                    player2Card.moveToPile(wonCardsPiles.get(1));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player2.setTurn(true);
+                }
+                break;
+            case "Money":
+                if(player1Card.getMoney() > player2Card.getMoney()){
+                    player1Card.moveToPile(wonCardsPiles.get(0));
+                    player2Card.moveToPile(wonCardsPiles.get(0));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player1.setTurn(true);
+                } else {
+                    player1Card.moveToPile(wonCardsPiles.get(1));
+                    player2Card.moveToPile(wonCardsPiles.get(1));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player2.setTurn(true);
+                }
+                break;
+
+            case "Influence":
+                if(player1Card.getInfluence() > player2Card.getInfluence()){
+                    player1Card.moveToPile(wonCardsPiles.get(0));
+                    player2Card.moveToPile(wonCardsPiles.get(0));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player1.setTurn(true);
+                } else {
+                    player1Card.moveToPile(wonCardsPiles.get(1));
+                    player2Card.moveToPile(wonCardsPiles.get(1));
+                    player1Card.flip();
+                    player2Card.flip();
+                    player2.setTurn(true);
+                }
+                break;
+
         }
-        return false;
+        return;
 
-    }
-
-    private void checkWinnerOfRound(Card player1Card, Card player2Card){
-        //todo
-        //if(player1Card.getRank() > player2Card.getRank()){
-
-            player1Card.moveToPile(wonCardsPiles.get(1));
-            player2Card.moveToPile(wonCardsPiles.get(1));
-            player1Card.flip();
-            player2Card.flip();
-            System.out.println("odwracam");
-            player1.setTurn(true);
-            player1Card.setContainingPile(wonCardsPiles.get(1));
-            player2Card.setContainingPile(wonCardsPiles.get(1));
-       // } else {
-//            player1Card.moveToPile(playersPiles.get(2));
-//            player2Card.moveToPile(playersPiles.get(2));
-//            player1Card.flip();
-//            player2Card.flip();
-
-       // }
     }
 
 
@@ -175,11 +268,11 @@ public class Game extends Pane {
     }
 
     private void initPiles(int howManyPlayers, String[] names) {
-        createPlayers(howManyPlayers,names);
+        createPlayers(howManyPlayers, names);
         initPlayerPiles(howManyPlayers, names);
-        }
+    }
 
-    private void initPlayerPiles(int howManyPlayers, String[] names){
+    private void initPlayerPiles(int howManyPlayers, String[] names) {
         //todo
 
 
@@ -206,7 +299,8 @@ public class Game extends Pane {
                 getChildren().add(playerWonCards);
                 /////////////////////////////////////////////////
 
-            } else if (howManyPlayers == 3){
+
+            } else if (howManyPlayers == 3) {
                 //todo
             } else if (howManyPlayers == 4) {
                 //todo
@@ -214,11 +308,13 @@ public class Game extends Pane {
                 System.out.println("Something went wrong!");
             }
         }
+
+
     }
 
-    private void createPlayers(int howManyPlayers, String[] names){
-        player1 = new Player(0,0);
-        player2 = new Player(1,0);
+    private void createPlayers(int howManyPlayers, String[] names) {
+        player1 = new Player(0, 0);
+        player2 = new Player(1, 0);
 
     }
 
@@ -240,9 +336,11 @@ public class Game extends Pane {
                 //player1Pile.getTopCard().flip();
                 getChildren().add(card);
             }
+
     }
 
 }
+
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,

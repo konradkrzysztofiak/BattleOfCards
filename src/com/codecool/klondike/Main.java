@@ -23,6 +23,7 @@ public class Main extends Application {
 
     Game game = new Game();
 
+
     public static void main(String[] args) {
         launch(args);
     }
