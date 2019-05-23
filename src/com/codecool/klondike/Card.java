@@ -9,12 +9,15 @@ import javafx.scene.paint.Color;
 import java.util.*;
 
 public class Card extends ImageView {
+
     private boolean faceDown;
 
     private int Strength;
     private int Skills;
+
     private int money;
     private int influence;
+    private int companion;
     private String name;
 
     private Image backFace;
@@ -29,11 +32,14 @@ public class Card extends ImageView {
 
     private CardsDaoXml cardsDaoXml = new CardsDaoXml();
 
-    public Card(int Strength, int Skills, int money, int influence, String name) {
-        this.Strength = Strength;
-        this.Skills = Skills;
+
+    public Card(int str, int skills, int money, int influence, int companion, String name) {
+        this.str = str;
+        this.skills = skills;
+
         this.money = money;
         this.influence = influence;
+        this.companion = companion;
         this.name = name;
         this.faceDown = true;
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
@@ -45,16 +51,16 @@ public class Card extends ImageView {
 
     public Card() {
         cardsDaoXml.addCards();
-
     }
 
-    public int getStrength() {
-        return Strength;
+    public int getCompanion() {
+        return companion;
     }
 
-    public int getSkills() {
-        return Skills;
-    }
+    public int getStr() { return str; }
+
+    public int getSkills() { return skills; }
+
 
     public int getMoney() {
         return money;
@@ -97,6 +103,13 @@ public class Card extends ImageView {
         faceDown = !faceDown;
         setImage(faceDown ? backFace : frontFace);
     }
+
+
+    @Override
+    public String toString() {
+        return str + " " + skills + " " + money + " " + influence + " " + companion + " ";
+    }
+
 
     public static List createNewDeck() {
         CardsDaoXml cardsDaoXml = new CardsDaoXml();
