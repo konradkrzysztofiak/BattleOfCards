@@ -149,15 +149,15 @@ public class Game extends Pane {
 
 
         for (int i = 0; i < howManyPlayers; i++) {
-            int[] coordinates = {95, 1150};
-            int[] wonCardsPilesX = {320, 930};
+            int[] coordinates = {95, 985};
+            int[] wonCardsPilesX = {320, 760};
             if (howManyPlayers == 2) {
                 // PLAYER PILE
                 Pile playerPile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
                 playerPile.setOwnerID(i);
                 playerPile.setBlurredBackground();
                 playerPile.setLayoutX(coordinates[i]);
-                playerPile.setLayoutY(20);
+                playerPile.setLayoutY(35);
                 //playerPile.setOnMouseClicked(stockReverseCardsHandler);
                 playersPiles.add(playerPile);
                 getChildren().add(playerPile);
@@ -166,7 +166,7 @@ public class Game extends Pane {
                 //playerWonCards.setOwnerID(i);
                 playerWonCards.setBlurredBackground();
                 playerWonCards.setLayoutX(wonCardsPilesX[i]);
-                playerWonCards.setLayoutY(20);
+                playerWonCards.setLayoutY(35);
                 wonCardsPiles.add(playerWonCards);
                 getChildren().add(playerWonCards);
                 /////////////////////////////////////////////////
