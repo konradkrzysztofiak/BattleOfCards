@@ -71,27 +71,34 @@ public class Game extends Pane {
     //todo
         Card card = (Card) e.getSource();
 
-        if(player1.hasTurn() && card.getContainingPile().getOwnerID() == player1.id()){
-            player1TopCard = card.getContainingPile().getTopCard();
-            System.out.println(player1TopCard.getName());
-            System.out.println("elo");
+        if(isMoveValid(card)) {
             //if(card == player1TopCard && card.isFaceDown()) {
-            if(card == player1TopCard) {
+            if (card == player1TopCard) {
                 player1TopCard.flip();
                 player1.setTurn(false);
                 player2.setTurn(true);
-            }
-
-        } else if(player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id()){
-            player2TopCard = card.getContainingPile().getTopCard();
-            //if(card == player2TopCard && card.isFaceDown()) {
-            if(card == player2TopCard) {
+            } else if (card == player2TopCard) {
                 player2TopCard.flip();
                 player2.setTurn(false);
                 player1.setTurn(false);
             }
         }
+
+
     };
+    private boolean isMoveValid(Card card){
+        if(player1.hasTurn()) {
+            player1TopCard = card.getContainingPile().getTopCard();
+            return (card.getContainingPile().getOwnerID() == player1.id() &&
+                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
+        } else if (player2.hasTurn()){
+            player2TopCard = card.getContainingPile().getTopCard();
+            return (card.getContainingPile().getOwnerID() == player2.id() &&
+                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
+        }
+        return false;
+
+    }
 
     private void checkWinnerOfRound(Card player1Card, Card player2Card){
         //todo
@@ -101,7 +108,10 @@ public class Game extends Pane {
             player2Card.moveToPile(wonCardsPiles.get(1));
             player1Card.flip();
             player2Card.flip();
+            System.out.println("odwracam");
             player1.setTurn(true);
+            player1Card.setContainingPile(wonCardsPiles.get(1));
+            player2Card.setContainingPile(wonCardsPiles.get(1));
        // } else {
 //            player1Card.moveToPile(playersPiles.get(2));
 //            player2Card.moveToPile(playersPiles.get(2));
@@ -161,26 +171,6 @@ public class Game extends Pane {
                 getChildren().add(playerWonCards);
                 /////////////////////////////////////////////////
 
-//                player2Pile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
-//                player2Pile.setBlurredBackground();
-//                player2Pile.setLayoutX(coordinates[i]);
-//                player2Pile.setLayoutY(20);
-//                player2Pile.setOnMouseClicked(stockReverseCardsHandler);
-//                getChildren().add(player2Pile);
-
-
-
-//                player1Fight = new Pile(Pile.PileType.WINCARDS, names[i] + " Fight pile", FIGHT_GAP);
-//                player1Fight.setBlurredBackground();
-//                player1Fight.setLayoutX(320);
-//                player1Fight.setLayoutY(20);
-//                getChildren().add(player1Fight);
-//
-//                player2Fight = new Pile(Pile.PileType.FIGHTPLAYER2, names[i] + " Fight pile", FIGHT_GAP);
-//                player2Fight.setBlurredBackground();
-//                player2Fight.setLayoutX(930);
-//                player2Fight.setLayoutY(20);
-//                getChildren().add(player2Fight);
             } else if (howManyPlayers == 3){
                 //todo
             } else if (howManyPlayers == 4) {
