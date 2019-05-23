@@ -12,8 +12,8 @@ public class Card extends ImageView {
 
     private boolean faceDown;
 
-    private int Strength;
-    private int Skills;
+    private int strength;
+    private int skills;
 
     private int money;
     private int influence;
@@ -33,8 +33,8 @@ public class Card extends ImageView {
     private CardsDaoXml cardsDaoXml = new CardsDaoXml();
 
 
-    public Card(int str, int skills, int money, int influence, int companion, String name) {
-        this.str = str;
+    public Card(int strength, int skills, int money, int influence, int companion, String name) {
+        this.strength = strength;
         this.skills = skills;
 
         this.money = money;
@@ -57,7 +57,7 @@ public class Card extends ImageView {
         return companion;
     }
 
-    public int getStr() { return str; }
+    public int getStrength() { return strength; }
 
     public int getSkills() { return skills; }
 
@@ -107,7 +107,7 @@ public class Card extends ImageView {
 
     @Override
     public String toString() {
-        return str + " " + skills + " " + money + " " + influence + " " + companion + " ";
+        return strength + " " + skills + " " + money + " " + influence + " " + companion + " ";
     }
 
 

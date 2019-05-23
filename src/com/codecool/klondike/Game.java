@@ -25,7 +25,7 @@ import java.util.*;
 public class Game extends Pane {
 
     private List<Card> deck;
-    public Card player1TopCard;
+    private Card player1TopCard;
     private Card player2TopCard;
     private Player player1;
     private Player player2;
@@ -58,13 +58,13 @@ public class Game extends Pane {
     public void fillCardInfo()
     {
         if(player1.hasTurn()) {
-            cardInfoPlayer1.add(String.valueOf(player1TopCard.getStr()));
+            cardInfoPlayer1.add(String.valueOf(player1TopCard.getStrength()));
             cardInfoPlayer1.add(String.valueOf(player1TopCard.getSkills()));
             cardInfoPlayer1.add(String.valueOf(player1TopCard.getMoney()));
             cardInfoPlayer1.add(String.valueOf(player1TopCard.getInfluence()));
             cardInfoPlayer1.add(String.valueOf(player1TopCard.getCompanion()));
         } else {
-            cardInfoPlayer2.add(String.valueOf(player2TopCard.getStr()));
+            cardInfoPlayer2.add(String.valueOf(player2TopCard.getStrength()));
             cardInfoPlayer2.add(String.valueOf(player2TopCard.getSkills()));
             cardInfoPlayer2.add(String.valueOf(player2TopCard.getMoney()));
             cardInfoPlayer2.add(String.valueOf(player2TopCard.getInfluence()));
@@ -91,6 +91,7 @@ public class Game extends Pane {
                     stats = "Strength";
                     if (lastTurnPlayerId == player1.id()) {
                         player2.setTurn(true);
+                        System.out.println("elo");
                     } else {
                         player1.setTurn(true);
                     }
@@ -152,9 +153,11 @@ public class Game extends Pane {
         gameScene.addEventHandler(KeyEvent.KEY_PRESSED, handler);
 
 
-        if(isMoveValid(card)) {
+        if(player1.hasTurn() && card.getContainingPile().getOwnerID() == player1.id() &&
+                card.getContainingPile().getPileType() != Pile.PileType.WONCARDS) {
+            player1TopCard = card.getContainingPile().getTopCard();
             cardInfoPlayer1.clear();
-            cardInfoPlayer2.clear();
+
             fillCardInfo();
             //if(card == player1TopCard && card.isFaceDown()) {
             if (card == player1TopCard) {
@@ -167,8 +170,12 @@ public class Game extends Pane {
                 this.lastTurnPlayerId = player1.id();
             }
 
-        } else if (player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id()) {
+        } else if (player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id() &&
+                card.getContainingPile().getPileType() != Pile.PileType.WONCARDS) {
+
             player2TopCard = card.getContainingPile().getTopCard();
+            cardInfoPlayer2.clear();
+            fillCardInfo();
             //if(card == player2TopCard && card.isFaceDown()) {
             if (card == player2TopCard) {
                 player2TopCard.flip();
@@ -179,6 +186,19 @@ public class Game extends Pane {
             }
         }
     };
+    private boolean isMoveValid(Card card){
+        if(player1.hasTurn()) {
+            player1TopCard = card.getContainingPile().getTopCard();
+            return (card.getContainingPile().getOwnerID() == player1.id() &&
+                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
+        } else if (player2.hasTurn()){
+            player2TopCard = card.getContainingPile().getTopCard();
+            return (card.getContainingPile().getOwnerID() == player2.id() &&
+                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
+        }
+        return false;
+
+    }
 
 
     private void checkWinnerOfRound(Card player1Card, Card player2Card, String stats) {
