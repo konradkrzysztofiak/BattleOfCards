@@ -30,6 +30,10 @@ public class Player {
         isPlayerAllive = playerAllive;
     }
 
+    public boolean isPlayerAllive() {
+        return isPlayerAllive;
+    }
+
     public int getScore() {
         return score;
     }

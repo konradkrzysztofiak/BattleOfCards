@@ -152,38 +152,51 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         gameScene.addEventHandler(KeyEvent.KEY_PRESSED, handler);
 
+        if (player1.isPlayerAllive() && player2.isPlayerAllive()) {
+            if (player1.hasTurn() && card.getContainingPile().getOwnerID() == player1.id() &&
+                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS) {
+                player1TopCard = card.getContainingPile().getTopCard();
+                cardInfoPlayer1.clear();
 
-        if(player1.hasTurn() && card.getContainingPile().getOwnerID() == player1.id() &&
-                card.getContainingPile().getPileType() != Pile.PileType.WONCARDS) {
-            player1TopCard = card.getContainingPile().getTopCard();
-            cardInfoPlayer1.clear();
+                fillCardInfo();
+                //if(card == player1TopCard && card.isFaceDown()) {
+                if (card == player1TopCard) {
+                    System.out.println(player1TopCard.getName());
 
-            fillCardInfo();
-            //if(card == player1TopCard && card.isFaceDown()) {
-            if (card == player1TopCard) {
-                System.out.println(player1TopCard.getName());
+                    player1TopCard.flip();
+                    Main.player1Label(cardInfoPlayer1, labelPlayer1);
+                    player1.setTurn(false);
+                    player2.setTurn(false);
+                    this.lastTurnPlayerId = player1.id();
+                }
 
-                player1TopCard.flip();
-                Main.player1Label(cardInfoPlayer1, labelPlayer1);
-                player1.setTurn(false);
-                player2.setTurn(false);
-                this.lastTurnPlayerId = player1.id();
+            } else if (player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id() &&
+                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS) {
+
+                player2TopCard = card.getContainingPile().getTopCard();
+                cardInfoPlayer2.clear();
+                fillCardInfo();
+                if (card == player2TopCard) {
+                    player2TopCard.flip();
+                    Main.player2Label(cardInfoPlayer2, labelPlayer2);
+                    player2.setTurn(false);
+                    this.lastTurnPlayerId = player2.id();
+                }
             }
-
-        } else if (player2.hasTurn() && card.getContainingPile().getOwnerID() == player2.id() &&
-                card.getContainingPile().getPileType() != Pile.PileType.WONCARDS) {
-
-            player2TopCard = card.getContainingPile().getTopCard();
-            cardInfoPlayer2.clear();
-            fillCardInfo();
-            //if(card == player2TopCard && card.isFaceDown()) {
-            if (card == player2TopCard) {
-                player2TopCard.flip();
-                Main.player2Label(cardInfoPlayer2, labelPlayer2);
-                player2.setTurn(false);
-                this.lastTurnPlayerId = player2.id();
-                //player1.setTurn(true);
-            }
+        } else {
+            System.out.println("U WON");
+            player1.setTurn(false);
+            player2.setTurn(false);
+        }
+    };
+    private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
+        Pile playerPile = (Pile) e.getSource();
+        if (playerPile.getOwnerID() == playersPiles.get(0).getOwnerID()) {
+            Pile stockPile = wonCardsPiles.get(0);
+            refillStockFromDiscard(stockPile,playerPile,player1);
+        } else {
+            Pile stockPile = wonCardsPiles.get(1);
+            refillStockFromDiscard(stockPile,playerPile, player2);
         }
     };
     private boolean isMoveValid(Card card){
@@ -271,19 +284,19 @@ public class Game extends Pane {
     }
 
 
-    public void refillStockFromDiscard(Pile activePile, Pile previousPile) {
-        //todo
-        Iterator<Card> cardIterator = previousPile.getCards().iterator();
-        Collections.reverse(previousPile.getCards());
+    public void refillStockFromDiscard(Pile discardPile, Pile playerPile, Player player) {
+        Iterator<Card> cardIterator = discardPile.getCards().iterator();
+        Collections.reverse(discardPile.getCards());
+        if (!cardIterator.hasNext()){
+            player.setPlayerAllive(false);
+        }
         while (cardIterator.hasNext()) {
             Card card = cardIterator.next();
             //card.flip();
-            activePile.addCard(card);
-            System.out.println("Stock refilled from discard pile.");
+            playerPile.addCard(card);
 
         }
-        previousPile.clear();
-
+        discardPile.clear();
 
     }
 
@@ -306,7 +319,7 @@ public class Game extends Pane {
                 playerPile.setBlurredBackground();
                 playerPile.setLayoutX(coordinates[i]);
                 playerPile.setLayoutY(35);
-                //playerPile.setOnMouseClicked(stockReverseCardsHandler);
+                playerPile.setOnMouseClicked(stockReverseCardsHandler);
                 playersPiles.add(playerPile);
                 getChildren().add(playerPile);
                 // PLAYER WON CARDS PILE
