@@ -10,8 +10,9 @@ import java.util.List;
 
 import com.codecool.klondike.Card;
 
-public class CardsDaoXml implements CardsDao  {
-    private ArrayList<Card> cards;
+public class CardsDaoXml implements CardsDao {
+
+    private List<Card> cards;
 
     public CardsDaoXml() {
         cards = new ArrayList<>();
@@ -24,18 +25,16 @@ public class CardsDaoXml implements CardsDao  {
 
     @Override
     public Card getCard(int index) {
-        Card card;
-        card =cards.get(index);
-        return card;
+        return cards.get(index);
     }
 
     @Override
     public void addCards() {
         NodeList nodeList = getCardParameters();
-        for(int i= 0 ; i<nodeList.getLength();i++){
+        for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
 
-            if(node.getNodeType() == Node.ELEMENT_NODE){
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
                 Element element = (Element) node;
                 Card card = new Card(
                         Integer.parseInt(element.getElementsByTagName("Strength").item(0).getTextContent()),
@@ -51,7 +50,7 @@ public class CardsDaoXml implements CardsDao  {
     }
 
     @Override
-    public NodeList getCardParameters(){
+    public NodeList getCardParameters() {
         XMLParserer xmlParserer = new XMLParserer();
         xmlParserer.loadXmlDoc("resources/Xml/XmlCards.xml");
         Document document = xmlParserer.getDocument();

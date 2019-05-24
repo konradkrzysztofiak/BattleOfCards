@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
@@ -14,42 +13,39 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 
-import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.*;
 
 
 public class Game extends Pane {
 
-    private List<Card> deck;
+    private List deck;
     private Card player1TopCard;
     private Card player2TopCard;
     private Player player1;
     private Player player2;
-    private String[] names = {"Eugeniusz", "Mieczyslaw"};
     private List<Pile> playersPiles = FXCollections.observableArrayList();
     private List<Pile> wonCardsPiles = FXCollections.observableArrayList();
-    private static double PLAYER_GAP = 1;
-    private static double WONCARDS_GAP = 1;
 
     private Scene gameScene;
     private Label labelPlayer1;
     private Label labelPlayer2;
+    private Label labelColorPlayer1;
+    private Label labelColorPlayer2;
 
-    public List cardInfoPlayer1 = new ArrayList();
-    public List cardInfoPlayer2 = new ArrayList();
+    public List<String> cardInfoPlayer1 = new ArrayList<>();
+    public List<String> cardInfoPlayer2 = new ArrayList<>();
 
     private String stats = null;
     private int lastTurnPlayerId;
 
 
-
     public Game() {
         deck = Card.createNewDeck();
-        initPiles(2, this.names);
+        String[] names = {"Eugeniusz", "Mieczyslaw"};
+        initPiles(2, names);
         dealCards();
         player1.setTurn(true);
     }
@@ -78,12 +74,25 @@ public class Game extends Pane {
     }
 
     public void addMouseEventHandlers(Card card) {
-
         card.setOnMouseClicked(onMouseClickedHandler);
-        //card.setOnMouseMoved(onMouseMovedHandler);
+    }
+
+    private void changeColor(){
+        if(player1.hasTurn())
+        {
+            System.out.println("change color");
+            Main.playerTurnColor(labelColorPlayer2, "#FFFFFF");
+            Main.playerTurnColor(labelColorPlayer1, "#24b600");
+
+        } else if (player2.hasTurn()) {
+            System.out.println("change color");
+            Main.playerTurnColor(labelColorPlayer1, "#FFFFFF");
+            Main.playerTurnColor(labelColorPlayer2, "#24b600");
+        }
     }
 
     private EventHandler<KeyEvent> handler = event -> {
+
         switch (event.getCode()) {
             case Q:
                 if(!player1.hasTurn() && !player2.hasTurn()) {
@@ -134,21 +143,30 @@ public class Game extends Pane {
                 break;
             case ENTER:
 
+                List zeroStats = getList();
                 if (stats != null) {
                     if (!player1TopCard.isFaceDown() && !player2TopCard.isFaceDown()){
                         checkWinnerOfRound(player1TopCard, player2TopCard, stats);
                         stats = null;
                         System.out.println("po win");
                     }
+                    Main.player1Label(zeroStats, labelPlayer1);
+                    Main.player2Label(zeroStats, labelPlayer2);
                 }
                 break;
-
         }};
 
-
+    private List getList() {
+        List zeroStats = new ArrayList<>();
+        zeroStats.add(0);
+        zeroStats.add(0);
+        zeroStats.add(0);
+        zeroStats.add(0);
+        zeroStats.add(0);
+        return zeroStats;
+    }
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
-        //todo
         Card card = (Card) e.getSource();
         gameScene.addEventHandler(KeyEvent.KEY_PRESSED, handler);
 
@@ -186,20 +204,6 @@ public class Game extends Pane {
             }
         }
     };
-    private boolean isMoveValid(Card card){
-        if(player1.hasTurn()) {
-            player1TopCard = card.getContainingPile().getTopCard();
-            return (card.getContainingPile().getOwnerID() == player1.id() &&
-                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
-        } else if (player2.hasTurn()){
-            player2TopCard = card.getContainingPile().getTopCard();
-            return (card.getContainingPile().getOwnerID() == player2.id() &&
-                    card.getContainingPile().getPileType() != Pile.PileType.WONCARDS);
-        }
-        return false;
-
-    }
-
 
     private void checkWinnerOfRound(Card player1Card, Card player2Card, String stats) {
         switch (stats) {
@@ -264,27 +268,21 @@ public class Game extends Pane {
                     player2.setTurn(true);
                 }
                 break;
-
         }
         return;
-
     }
 
-
     public void refillStockFromDiscard(Pile activePile, Pile previousPile) {
-        //todo
+
         Iterator<Card> cardIterator = previousPile.getCards().iterator();
         Collections.reverse(previousPile.getCards());
         while (cardIterator.hasNext()) {
             Card card = cardIterator.next();
-            //card.flip();
             activePile.addCard(card);
             System.out.println("Stock refilled from discard pile.");
 
         }
         previousPile.clear();
-
-
     }
 
     private void initPiles(int howManyPlayers, String[] names) {
@@ -293,7 +291,6 @@ public class Game extends Pane {
     }
 
     private void initPlayerPiles(int howManyPlayers, String[] names) {
-        //todo
 
 
         for (int i = 0; i < howManyPlayers; i++) {
@@ -301,6 +298,7 @@ public class Game extends Pane {
             int[] wonCardsPilesX = {320, 760};
             if (howManyPlayers == 2) {
                 // PLAYER PILE
+                double PLAYER_GAP = 1;
                 Pile playerPile = new Pile(Pile.PileType.PLAYERS, names[i], PLAYER_GAP);
                 playerPile.setOwnerID(i);
                 playerPile.setBlurredBackground();
@@ -310,6 +308,7 @@ public class Game extends Pane {
                 playersPiles.add(playerPile);
                 getChildren().add(playerPile);
                 // PLAYER WON CARDS PILE
+                double WONCARDS_GAP = 1;
                 Pile playerWonCards = new Pile(Pile.PileType.WONCARDS, names[i], WONCARDS_GAP);
                 //playerWonCards.setOwnerID(i);
                 playerWonCards.setBlurredBackground();
@@ -328,8 +327,6 @@ public class Game extends Pane {
                 System.out.println("Something went wrong!");
             }
         }
-
-
     }
 
     private void createPlayers(int howManyPlayers, String[] names) {
@@ -342,38 +339,25 @@ public class Game extends Pane {
         Collections.shuffle(deck);
         Iterator<Card> deckIterator = deck.iterator();
         dealCardsToPlayers(deckIterator);
-        //dealCardsToPlayer2(deckIterator);
     }
 
     private void dealCardsToPlayers(Iterator<Card> deckIterator) {
         int amountOfCards = 28;
-        int howManyPlayers = 2;
         for (Pile playerPile : playersPiles) {
             for (int i = 0; i < amountOfCards / 2; i++) {
                 Card card = deckIterator.next();
                 addMouseEventHandlers(card);
                 playerPile.addCard(card);
-                //player1Pile.getTopCard().flip();
                 getChildren().add(card);
             }
-
+        }
     }
-
-}
-
 
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
-
-    EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-
-        }
-    };
 
     public void setGameLabelPlayer1(Label labelPlayer1) {
         this.labelPlayer1 = labelPlayer1;
@@ -382,5 +366,11 @@ public class Game extends Pane {
         this.labelPlayer2 = labelPlayer2;
     }
 
+    public void setLabelColorPlayer1(Label labelColorPlayer1) {
+        this.labelColorPlayer1 = labelColorPlayer1;
+    }
 
+    public void setLabelColorPlayer2(Label labelColorPlayer2) {
+        this.labelColorPlayer2 = labelColorPlayer2;
+    }
 }

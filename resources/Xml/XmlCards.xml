@@ -66,9 +66,9 @@
     </Card>
     <Card id = "9">
         <CardName>Davos Seaworth</CardName>
-        <Strength>50</Strength>
+        <Strength>60</Strength>
         <Skills>60</Skills>
-        <Money>200</Money>
+        <Money>300</Money>
         <Influence>40</Influence>
         <Companion>0</Companion>
     </Card>

@@ -53,34 +53,19 @@ public class Card extends ImageView {
         cardsDaoXml.addCards();
     }
 
-    public int getCompanion() {
-        return companion;
-    }
+    public int getCompanion() { return companion; }
 
     public int getStrength() { return strength; }
 
     public int getSkills() { return skills; }
 
+    public int getMoney() { return money; }
 
-    public int getMoney() {
-        return money;
-    }
+    public int getInfluence() { return influence; }
 
-    public int getInfluence() {
-        return influence;
-    }
+    public String getName() { return name; }
 
-    public String getName() {
-        return name;
-    }
-
-    public boolean isFaceDown() {
-        return faceDown;
-    }
-
-    public String getShortName(int index) {
-        return cardsDaoXml.getCard(index).getName();
-    }
+    public boolean isFaceDown() { return faceDown; }
 
     public DropShadow getDropShadow() {
         return dropShadow;
@@ -103,13 +88,6 @@ public class Card extends ImageView {
         faceDown = !faceDown;
         setImage(faceDown ? backFace : frontFace);
     }
-
-
-    @Override
-    public String toString() {
-        return strength + " " + skills + " " + money + " " + influence + " " + companion + " ";
-    }
-
 
     public static List createNewDeck() {
         CardsDaoXml cardsDaoXml = new CardsDaoXml();

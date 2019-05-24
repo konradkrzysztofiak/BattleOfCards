@@ -7,20 +7,33 @@ import java.io.File;
 
 public class SoundPlayer {
 
-    String filePath = "gamemusic.mp3";
+    private String filePath;
+    private Media sound;
+    private MediaPlayer mediaPlayer;
 
-    Media sound = new Media(new File(filePath).toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    public SoundPlayer(String filePath) {
+        this.filePath = filePath;
+        sound = new Media(new File(filePath).toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
+    }
 
     public void Stop()
     {
         mediaPlayer.stop();
     }
 
-    public void Play(String filePath)
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void Play()
     {
-        sound = new Media(new File(filePath).toURI().toString());
         mediaPlayer.play();
     }
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+        sound = new Media(new File(filePath).toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
+    }
 }

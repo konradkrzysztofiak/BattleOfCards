@@ -18,8 +18,8 @@ public class Main extends Application {
     private static final double WINDOW_WIDTH = 1280;
     private static final double WINDOW_HEIGHT = 720;
 
-    Stage window;
-    Scene menuScene, gameScene;
+    private Stage window;
+    private Scene menuScene, gameScene;
 
     Game game = new Game();
 
@@ -30,38 +30,52 @@ public class Main extends Application {
 
     public static Label player1Label(List stats, Label cardStats)
     {
-        cardStats.setText(stats.get(0) + "\n" + stats.get(1) + "\n" + stats.get(2) + "\n" + stats.get(3) + "\n" + stats.get(4));
+        cardStats.setText(stats.get(0) + "\n" + stats.get(1) + "\n" + stats.get(2) + "\n" + stats.get(3));
 
         return cardStats;
     }
 
     public static Label player2Label(List stats, Label card2Stats)
     {
-        card2Stats.setText(stats.get(0) + "\n" + stats.get(1) + "\n" + stats.get(2) + "\n" + stats.get(3) + "\n" + stats.get(4));
+        card2Stats.setText(stats.get(0) + "\n" + stats.get(1) + "\n" + stats.get(2) + "\n" + stats.get(3));
 
         return card2Stats;
+    }
+
+    public static Label playerTurnColor(Label labelPlayer, String color)
+    {
+        labelPlayer.setTextFill(Color.web(color));
+        return labelPlayer;
     }
 
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
 
-        SoundPlayer soundPlayer = new SoundPlayer();
-        soundPlayer.Play("got.mp3");
+        SoundPlayer soundPlayer = new SoundPlayer("got.mp3");
+        soundPlayer.Play();
 
+        double MIN_WIDTH = 100;
         // MENU --------------------------------------------------------
-        Button twoPlayers = new Button("2 Players");
-        //Button fourPlayers = new Button("4 Players");
+        Button newGameButton = new Button("New game!");
+        newGameButton.setMinWidth(MIN_WIDTH);
+        newGameButton.setTranslateX(100);
+        newGameButton.setTranslateY(120);
 
-        twoPlayers.setOnAction(e -> {
+        Button exitButton = new Button("Exit");
+        exitButton.setMinWidth(MIN_WIDTH);
+        exitButton.setTranslateX(100);
+        exitButton.setTranslateY(180);
+
+        newGameButton.setOnAction(e -> {
             window.setScene(gameScene);
             soundPlayer.Stop();
-            soundPlayer.Play("gamemusic.mp3");
+            soundPlayer.setFilePath("gamemusic.mp3");
+            soundPlayer.Play();
         });
-        //---------------------------------------------------------------
-        //fourPlayers.setOnAction(e -> {
-        //    window.setScene(gameScene);
-        //});
+
+        exitButton.setOnAction(e -> { primaryStage.close();});
+
         // player 1
         Label labelPlayer1 = new Label("Player 1");
         labelPlayer1.setLayoutX(110);
@@ -91,21 +105,21 @@ public class Main extends Application {
         stats.setTextFill(Color.web("#FFFFFF"));
 
         // stats label
-        Label str = new Label("Strength\nSkills\nMoney\nInfluence\nCompanion");
+        Label str = new Label("Strength (Q)\nSkills (W)\nMoney (E)\nInfluence (R)");
         str.setLayoutX((WINDOW_WIDTH / 2) - 80);
         str.setLayoutY((WINDOW_HEIGHT / 2) + 110);
         str.setFont(new Font(30));
         str.setTextFill(Color.web("#FFFFFF"));
 
         //stats player1's card
-        Label cardStats = new Label("10\n10\n10\n10\n10");
+        Label cardStats = new Label("0\n0\n0\n0");
         cardStats.setLayoutX((WINDOW_WIDTH / 2) - 200);
         cardStats.setLayoutY((WINDOW_HEIGHT / 2) + 110);
         cardStats.setFont(new Font(30));
         cardStats.setTextFill(Color.web("#FFFFFF"));
 
         //stats player2's card
-        Label card2Stats = new Label("10\n10\n10\n10\n10");
+        Label card2Stats = new Label("0\n0\n0\n0");
         card2Stats.setLayoutX((WINDOW_WIDTH / 2) + 180);
         card2Stats.setLayoutY((WINDOW_HEIGHT / 2) + 110);
         card2Stats.setFont(new Font(30));
@@ -113,14 +127,14 @@ public class Main extends Application {
 
 
         VBox layout = new VBox(50);
-        BackgroundImage myBI= new BackgroundImage(new Image("/table/green.png",640,480, false,true),
+        BackgroundImage myBI= new BackgroundImage(new Image("/table/menubackground.jpg",640,480, false,true),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
 
         layout.setBackground(new Background(myBI));
 
-        layout.getChildren().addAll(twoPlayers);
-        menuScene = new Scene(layout, 300, 300);
+        layout.getChildren().addAll(newGameButton, exitButton);
+        menuScene = new Scene(layout, 640, 480);
 
         // GAME --------------------------------------------------------
         Card card = new Card();
@@ -139,6 +153,8 @@ public class Main extends Application {
         game.setGameScene(gameScene);
         game.setGameLabelPlayer1(cardStats);
         game.setGameLabelPlayer2(card2Stats);
+        game.setLabelColorPlayer1(labelPlayer1);
+        game.setLabelColorPlayer2(labelPlayer2);
 
         window.setTitle("Battle of Cards");
         window.setScene(menuScene);

@@ -22,9 +22,7 @@ public class Player {
         return id;
     }
 
-    public boolean hasTurn() {
-        return turn;
-    }
+    public boolean hasTurn() { return turn; }
 
     public void setPlayerAllive(boolean playerAllive) {
         isPlayerAllive = playerAllive;
