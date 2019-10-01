@@ -52,8 +52,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         window = primaryStage;
 
-        SoundPlayer soundPlayer = new SoundPlayer("got.mp3");
-        soundPlayer.Play();
+        /*SoundPlayer soundPlayer = new SoundPlayer("resources/got.mp3");
+        soundPlayer.Play();*/
 
         double MIN_WIDTH = 100;
         // MENU --------------------------------------------------------
@@ -69,9 +69,9 @@ public class Main extends Application {
 
         newGameButton.setOnAction(e -> {
             window.setScene(gameScene);
-            soundPlayer.Stop();
+            /*soundPlayer.Stop();
             soundPlayer.setFilePath("gamemusic.mp3");
-            soundPlayer.Play();
+            soundPlayer.Play();*/
         });
 
         exitButton.setOnAction(e -> { primaryStage.close();});

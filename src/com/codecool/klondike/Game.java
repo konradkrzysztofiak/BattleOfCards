@@ -108,8 +108,8 @@ public class Game extends Pane {
                 break;
             case W:
                 if(!player1.hasTurn() && !player2.hasTurn()) {
-                System.out.println("Skills");
-                stats = "Skills";
+                    System.out.println("Skills");
+                    stats = "Skills";
                     if (lastTurnPlayerId == player1.id()) {
                         player2.setTurn(true);
                     } else {
@@ -119,8 +119,8 @@ public class Game extends Pane {
                 break;
             case E:
                 if(!player1.hasTurn() && !player2.hasTurn()) {
-                System.out.println("Money");
-                stats = "Money";
+                    System.out.println("Money");
+                    stats = "Money";
                     if (lastTurnPlayerId == player1.id()) {
                         player2.setTurn(true);
                     } else {
@@ -131,8 +131,8 @@ public class Game extends Pane {
             case R:
 
                 if(!player1.hasTurn() && !player2.hasTurn()) {
-                System.out.println("Influence");
-                stats = "Influence";
+                    System.out.println("Influence");
+                    stats = "Influence";
                     if (lastTurnPlayerId == player1.id()) {
                         player2.setTurn(true);
                     } else {
